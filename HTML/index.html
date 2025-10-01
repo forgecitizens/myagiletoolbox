@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Agile Toolkit - Page d'Accueil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="desktop">
+        <!-- Icônes du bureau -->
+        <div class="desktop-icon icon-about" onclick="selectIcon(this)">
+            <svg viewBox="0 0 32 32">
+                <rect x="4" y="4" width="24" height="24" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <rect x="6" y="6" width="20" height="20" fill="#ffffff"/>
+                <circle cx="16" cy="12" r="3" fill="#000080"/>
+                <rect x="13" y="18" width="6" height="8" fill="#000080"/>
+            </svg>
+            <span>À Propos</span>
+        </div>
+
+        <div class="desktop-icon icon-portfolio" onclick="selectIcon(this)">
+            <svg viewBox="0 0 32 32">
+                <rect x="4" y="8" width="24" height="16" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <rect x="6" y="10" width="20" height="12" fill="#ffffff"/>
+                <rect x="8" y="12" width="16" height="2" fill="#000080"/>
+                <rect x="8" y="16" width="12" height="2" fill="#000080"/>
+                <rect x="8" y="20" width="8" height="2" fill="#000080"/>
+            </svg>
+            <span>Mon Portfolio</span>
+        </div>
+
+        <div class="desktop-icon icon-projects" id="icon-projects" onclick="selectIcon(this)">
+            <svg viewBox="0 0 32 32">
+                <rect x="6" y="6" width="20" height="20" fill="#ffff00" stroke="#808080" stroke-width="1"/>
+                <rect x="8" y="8" width="16" height="16" fill="#ffffff"/>
+                <rect x="10" y="10" width="12" height="2" fill="#000080"/>
+                <rect x="10" y="14" width="8" height="2" fill="#000080"/>
+                <rect x="10" y="18" width="10" height="2" fill="#000080"/>
+            </svg>
+            <span>Mes Projets</span>
+        </div>
+
+        <div class="desktop-icon icon-contact" onclick="selectIcon(this)">
+            <svg viewBox="0 0 32 32">
+                <rect x="4" y="8" width="24" height="16" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <polygon points="4,8 16,16 28,8" fill="#ffffff" stroke="#808080"/>
+                <line x1="4" y1="24" x2="12" y2="16" stroke="#808080" stroke-width="1"/>
+                <line x1="28" y1="24" x2="20" y2="16" stroke="#808080" stroke-width="1"/>
+            </svg>
+            <span>Contact</span>
+        </div>
+
+        <div class="desktop-icon icon-trash" onclick="selectIcon(this)">
+            <svg viewBox="0 0 32 32">
+                <rect x="8" y="10" width="16" height="18" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <rect x="6" y="8" width="20" height="4" fill="#808080"/>
+                <rect x="12" y="4" width="8" height="4" fill="#808080"/>
+                <rect x="10" y="14" width="2" height="10" fill="#ff0000"/>
+                <rect x="15" y="14" width="2" height="10" fill="#ff0000"/>
+                <rect x="20" y="14" width="2" height="10" fill="#ff0000"/>
+            </svg>
+            <span>Corbeille (Pleine)</span>
+        </div>
+    </div>
+
+    <!-- Barre des tâches -->
+    <div class="taskbar">
+        <div class="start-button" id="start-button">
+            <img src="img/portrait.jpeg" alt="Portrait" style="width:8px; height:8px; margin-right:4px; object-fit:cover; border-radius:2px;">
+            Démarrer
+        </div>
+
+        <div class="taskbar-center">
+            <div class="window-button">
+                <span>Navigateur - Accueil</span>
+            </div>
+        </div>
+
+        <div class="system-tray">
+            <svg width="16" height="16" viewBox="0 0 16 16">
+                <rect x="2" y="6" width="12" height="8" fill="#c0c0c0" stroke="#808080"/>
+                <rect x="4" y="8" width="8" height="4" fill="#000080"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" style="margin-left: 4px;">
+                <circle cx="8" cy="8" r="6" fill="#c0c0c0" stroke="#808080"/>
+                <rect x="7" y="4" width="2" height="4" fill="#000000"/>
+                <rect x="7" y="8" width="4" height="2" fill="#000000"/>
+            </svg>
+            <span class="time" id="current-time">14:35</span>
+        </div>
+    </div>
+
+    <!-- Menu Démarrer -->
+    <div class="start-menu hidden" id="start-menu">
+        <div class="start-menu-header">My Agile Toolkit</div>
+        <div class="start-menu-separator"></div>
+        
+        <div class="start-menu-item" onclick="navigateToPage(1)">
+            Andrei Eleodor Sirbu
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(2)">
+            Photographie
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(3)">
+            Jeux-vidéos
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(4)">
+            Musique
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(5)">
+            Ecriture
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(6)">
+            Voyages
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(7)">
+            Paramètres
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(8)">
+            Essais
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(9)">
+            Illustrations
+        </div>
+        <div class="start-menu-item" onclick="navigateToPage(10)">
+            Dernières nouvelles
+        </div>
+        <div class="start-menu-separator"></div>
+        <div class="start-menu-item" onclick="shutdown()">
+            Arrêter...
+        </div>
+    </div>
+
+    <!-- Modale pour Mes Projets -->
+    <div id="projects-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" id="close-projects-modal">&times;</span>
+            <h2>Mes Projets</h2>
+            <div class="projects-list">
+                <div class="project-item" onclick="window.location.href='Competences.html'" style="cursor:pointer;">
+                    <div class="project-illustration">
+                        <img src="../img/skills.png" alt="Projet 1" style="width:16px; height:16px; object-fit:cover;">
+                    </div>
+                    <div class="project-info">
+                        <h3>Mon tableau de compétences</h3>
+                        <p>Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.</p>
+                    </div>
+                </div>
+                <div class="project-item" onclick="window.location.href='Memory.html'" style="cursor:pointer;">
+                    <div class="project-illustration">
+                        <img src="../img/project2.png" alt="Projet 2" />
+                    </div>
+                    <div class="project-info">
+                        <h3>Que savez-vous de Scrum ?</h3>
+                        <p>Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.</p>
+                    </div>
+                </div>
+                <div class="project-item" onclick="window.location.href='burnup.html'" style="cursor:pointer;">
+                    <div class="project-illustration">
+                        <img src="../img/project3.png" alt="Projet 3" />
+                    </div>
+                    <div class="project-info">
+                        <h3>Générateur de graphique burn-up</h3>
+                        <p>Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.</p>
+                    </div>
+                </div>
+                <!-- Ajoutez d'autres projets ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale pour Nouvel Email -->
+    <div id="email-modal" class="modal hidden">
+        <div class="modal-content" style="width:408px; max-width:90vw; padding:0;">
+            <div style="background:#316AC5;color:white;padding:8px 12px;font-weight:bold;font-family:'MS Sans Serif',sans-serif;font-size:15px;border-bottom:1px solid #808080;">
+                Nouveau message
+                <span class="close-btn" id="close-email-modal" style="float:right;cursor:pointer;font-size:20px;">&times;</span>
+            </div>
+            <form id="email-form" style="padding:16px;">
+                <label style="font-size:13px;font-family:'MS Sans Serif',sans-serif;">À : </label>
+                <input type="text" value="eleodorandrei@gmail.com" readonly style="width:220px;font-size:13px;margin-bottom:10px;background:#eee;border:1px solid #aaa;padding:2px 6px;"><br>
+                
+                <!-- LinkedIn section -->
+                <label style="font-size:13px;font-family:'MS Sans Serif',sans-serif;">LinkedIn :</label>
+                <a href="https://www.linkedin.com/in/andrei-eleodor-sirbu/" target="_blank"
+                   style="display:inline-block;width:100%;font-size:13px;margin-bottom:10px;color:#0a66c2;text-decoration:underline;white-space:nowrap;overflow-x:auto;">
+                    https://www.linkedin.com/in/andrei-eleodor-sirbu/
+                </a><br>
+                
+                <label style="font-size:13px;font-family:'MS Sans Serif',sans-serif;">Message :</label><br>
+                <textarea id="email-message" rows="6" style="width:100%;font-size:13px;margin-bottom:12px;border:1px solid #aaa;padding:4px;resize:vertical;"></textarea><br>
+                <button type="submit" style="font-size:13px;padding:4px 18px;background:#e0e0e0;border:2px outset #fff;border-radius:2px;cursor:pointer;">Envoyer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
