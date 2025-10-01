@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(updateTime, 1000);
 
     // Redirection for "Mes Projets" icon
-    document.getElementById('icon-projects').addEventListener('dblclick', function () {
+    document.getElementById('icon-projects').addEventListener('click', function () {
         document.getElementById('projects-modal').classList.remove('hidden');
     });
     document.getElementById('close-projects-modal').addEventListener('click', function () {
@@ -124,11 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const emailForm = document.getElementById('email-form');
     const emailMessage = document.getElementById('email-message');
 
-    contactIcon.addEventListener('dblclick', function () {
-        emailModal.classList.remove('hidden');
-        emailMessage.value = '';
-    });
-
     closeEmailModal.addEventListener('click', function () {
         emailModal.classList.add('hidden');
     });
@@ -138,5 +133,39 @@ document.addEventListener('DOMContentLoaded', function () {
         const body = encodeURIComponent(emailMessage.value);
         window.location.href = `mailto:eleodorandrei@gmail.com?subject=Contact%20depuis%20My%20Agile%20Toolkit&body=${body}`;
         emailModal.classList.add('hidden');
+    });
+
+    // Add click functionality for all icons
+    const aboutIcon = document.querySelector('.icon-about');
+    const portfolioIcon = document.querySelector('.icon-portfolio');
+    const trashIcon = document.querySelector('.icon-trash');
+    const projectsIcon = document.getElementById('icon-projects');
+
+    // Add click event listeners for all icons
+    aboutIcon.addEventListener('click', function () {
+        selectIcon(this);
+        alert('À Propos - Fonctionnalité à implémenter !');
+    });
+
+    portfolioIcon.addEventListener('click', function () {
+        selectIcon(this);
+        alert('Mon Portfolio - Fonctionnalité à implémenter !');
+    });
+
+    trashIcon.addEventListener('click', function () {
+        selectIcon(this);
+        alert('Corbeille (Pleine) - Fonctionnalité à implémenter !');
+    });
+
+    // Update projects icon to select and open modal
+    projectsIcon.addEventListener('click', function () {
+        selectIcon(this);
+    });
+
+    // Update contact icon to select and open email modal
+    contactIcon.addEventListener('click', function () {
+        selectIcon(this);
+        emailModal.classList.remove('hidden');
+        emailMessage.value = '';
     });
 });
