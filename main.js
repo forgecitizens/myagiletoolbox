@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update projects icon to select and open modal
     projectsIcon.addEventListener('click', function () {
         selectIcon(this);
+        initializeProjectsWindow();
     });
 
     // Update contact icon to select and open email modal
@@ -168,4 +169,158 @@ document.addEventListener('DOMContentLoaded', function () {
         emailModal.classList.remove('hidden');
         emailMessage.value = '';
     });
+});
+
+// Windows 98 Projects Modal Functionality
+let isProjectsDragging = false;
+let isProjectsScrollDragging = false;
+let projectsDragOffset = { x: 0, y: 0 };
+let projectsScrollOffset = 0;
+
+function initializeProjectsWindow() {
+    const projectsModal = document.getElementById('projects-modal');
+    const projectsWindow = document.getElementById('projects-window');
+    const projectsTitleBar = document.getElementById('projects-title-bar');
+    const projectsScrollableContent = document.getElementById('projects-scrollable-content');
+    const projectsScrollThumb = document.getElementById('projects-scroll-thumb');
+    
+    // Show the modal
+    projectsModal.classList.remove('hidden');
+    
+    // Initialize scroll thumb position
+    updateProjectsScrollThumb();
+    
+    // Window dragging functionality
+    projectsTitleBar.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('win98-control-button')) return;
+        isProjectsDragging = true;
+        const rect = projectsWindow.getBoundingClientRect();
+        projectsDragOffset.x = e.clientX - rect.left;
+        projectsDragOffset.y = e.clientY - rect.top;
+        document.addEventListener('mousemove', dragProjectsWindow);
+        document.addEventListener('mouseup', stopProjectsDragging);
+    });
+    
+    // Scroll thumb dragging
+    projectsScrollThumb.addEventListener('mousedown', (e) => {
+        isProjectsScrollDragging = true;
+        projectsScrollOffset = e.clientY - projectsScrollThumb.getBoundingClientRect().top;
+        document.addEventListener('mousemove', dragProjectsScrollThumb);
+        document.addEventListener('mouseup', stopProjectsScrollDragging);
+        e.preventDefault();
+    });
+    
+    // Update scroll thumb when content is scrolled
+    projectsScrollableContent.parentElement.addEventListener('scroll', updateProjectsScrollThumb);
+}
+
+function dragProjectsWindow(e) {
+    if (!isProjectsDragging || document.getElementById('projects-window').classList.contains('fullscreen')) return;
+    const projectsWindow = document.getElementById('projects-window');
+    projectsWindow.style.position = 'absolute';
+    projectsWindow.style.left = (e.clientX - projectsDragOffset.x) + 'px';
+    projectsWindow.style.top = (e.clientY - projectsDragOffset.y) + 'px';
+}
+
+function stopProjectsDragging() {
+    isProjectsDragging = false;
+    document.removeEventListener('mousemove', dragProjectsWindow);
+    document.removeEventListener('mouseup', stopProjectsDragging);
+}
+
+function scrollProjectsContent(delta) {
+    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('projects-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    const currentScroll = contentArea.scrollTop;
+    const newScroll = Math.max(0, Math.min(maxScroll, currentScroll + delta));
+    contentArea.scrollTop = newScroll;
+    updateProjectsScrollThumb();
+}
+
+function updateProjectsScrollThumb() {
+    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('projects-scrollable-content');
+    const scrollThumb = document.getElementById('projects-scroll-thumb');
+    
+    if (!contentArea || !scrollableContent || !scrollThumb) return;
+    
+    const scrollPercentage = contentArea.scrollTop / (scrollableContent.scrollHeight - contentArea.clientHeight);
+    const trackHeight = scrollThumb.parentElement.clientHeight;
+    const thumbPosition = scrollPercentage * (trackHeight - scrollThumb.clientHeight);
+    scrollThumb.style.top = Math.max(0, thumbPosition) + 'px';
+}
+
+function scrollProjectsToPosition(e) {
+    const scrollThumb = document.getElementById('projects-scroll-thumb');
+    if (e.target === scrollThumb) return;
+    
+    const track = e.currentTarget;
+    const rect = track.getBoundingClientRect();
+    const clickY = e.clientY - rect.top;
+    const scrollPercentage = clickY / track.clientHeight;
+    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('projects-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    contentArea.scrollTop = scrollPercentage * maxScroll;
+    updateProjectsScrollThumb();
+}
+
+function dragProjectsScrollThumb(e) {
+    if (!isProjectsScrollDragging) return;
+    const scrollThumb = document.getElementById('projects-scroll-thumb');
+    const track = scrollThumb.parentElement;
+    const trackRect = track.getBoundingClientRect();
+    const newY = e.clientY - trackRect.top - projectsScrollOffset;
+    const maxY = track.clientHeight - scrollThumb.clientHeight;
+    const clampedY = Math.max(0, Math.min(maxY, newY));
+    
+    scrollThumb.style.top = clampedY + 'px';
+    
+    const scrollPercentage = clampedY / maxY;
+    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('projects-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    contentArea.scrollTop = scrollPercentage * maxScroll;
+}
+
+function stopProjectsScrollDragging() {
+    isProjectsScrollDragging = false;
+    document.removeEventListener('mousemove', dragProjectsScrollThumb);
+    document.removeEventListener('mouseup', stopProjectsScrollDragging);
+}
+
+function minimizeProjectsWindow() {
+    const projectsWindow = document.getElementById('projects-window');
+    projectsWindow.style.transform = 'scale(0.1)';
+    projectsWindow.style.opacity = '0.5';
+    setTimeout(() => {
+        projectsWindow.style.transform = 'scale(1)';
+        projectsWindow.style.opacity = '1';
+    }, 500);
+}
+
+function toggleProjectsFullscreen() {
+    const projectsWindow = document.getElementById('projects-window');
+    projectsWindow.classList.toggle('fullscreen');
+    if (projectsWindow.classList.contains('fullscreen')) {
+        projectsWindow.style.position = 'fixed';
+        projectsWindow.style.left = '0';
+        projectsWindow.style.top = '0';
+    } else {
+        projectsWindow.style.position = 'relative';
+        projectsWindow.style.left = 'auto';
+        projectsWindow.style.top = 'auto';
+    }
+}
+
+// Close button functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const closeProjectsModal = document.getElementById('close-projects-modal');
+    if (closeProjectsModal) {
+        closeProjectsModal.addEventListener('click', function() {
+            const projectsModal = document.getElementById('projects-modal');
+            projectsModal.classList.add('hidden');
+        });
+    }
 });
