@@ -201,10 +201,24 @@ function initializeProjectsWindow() {
     // Update scroll thumb when content is scrolled
     projectsScrollableContent.parentElement.addEventListener('scroll', updateProjectsScrollThumb);
     
-    // Add mousewheel scrolling support
+    // Add mousewheel scrolling support to both the window and content area
+    const contentArea = projectsScrollableContent.parentElement;
+    
     projectsWindow.addEventListener('wheel', function(e) {
         e.preventDefault(); // Prevent page scrolling
-        const delta = e.deltaY > 0 ? 20 : -20; // Scroll down or up
+        const delta = e.deltaY > 0 ? 30 : -30; // Scroll down or up
+        scrollProjectsContent(delta);
+    });
+    
+    contentArea.addEventListener('wheel', function(e) {
+        e.preventDefault(); // Prevent page scrolling
+        const delta = e.deltaY > 0 ? 30 : -30; // Scroll down or up
+        scrollProjectsContent(delta);
+    });
+    
+    projectsScrollableContent.addEventListener('wheel', function(e) {
+        e.preventDefault(); // Prevent page scrolling
+        const delta = e.deltaY > 0 ? 30 : -30; // Scroll down or up
         scrollProjectsContent(delta);
     });
 }
