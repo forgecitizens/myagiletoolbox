@@ -151,11 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeProjectsWindow();
     });
 
-    // Update contact icon to select and open email modal
+    // Update contact icon to select and open contact modal
     contactIcon.addEventListener('click', function () {
         selectIcon(this);
-        emailModal.classList.remove('hidden');
-        emailMessage.value = '';
+        initializeContactWindow();
     });
 });
 
@@ -323,13 +322,199 @@ function toggleProjectsFullscreen() {
     }
 }
 
+// Windows 98 Contact Modal Functionality
+let isContactDragging = false;
+let isContactScrollDragging = false;
+let contactDragOffset = { x: 0, y: 0 };
+let contactScrollOffset = 0;
+
+function initializeContactWindow() {
+    const emailModal = document.getElementById('email-modal');
+    const contactWindow = document.getElementById('contact-window');
+    const contactTitleBar = document.getElementById('contact-title-bar');
+    const contactScrollableContent = document.getElementById('contact-scrollable-content');
+    const contactScrollThumb = document.getElementById('contact-scroll-thumb');
+    
+    // Show the modal
+    emailModal.classList.remove('hidden');
+    
+    // Initialize scroll thumb position
+    updateContactScrollThumb();
+    
+    // Window dragging functionality
+    contactTitleBar.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('win98-control-button')) return;
+        isContactDragging = true;
+        const rect = contactWindow.getBoundingClientRect();
+        contactDragOffset.x = e.clientX - rect.left;
+        contactDragOffset.y = e.clientY - rect.top;
+        document.addEventListener('mousemove', dragContactWindow);
+        document.addEventListener('mouseup', stopContactDragging);
+    });
+    
+    // Scroll thumb dragging
+    contactScrollThumb.addEventListener('mousedown', (e) => {
+        isContactScrollDragging = true;
+        contactScrollOffset = e.clientY - contactScrollThumb.getBoundingClientRect().top;
+        document.addEventListener('mousemove', dragContactScrollThumb);
+        document.addEventListener('mouseup', stopContactScrollDragging);
+        e.preventDefault();
+    });
+    
+    // Add mousewheel scrolling support
+    const contentArea = contactScrollableContent.parentElement;
+    
+    contactWindow.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 30 : -30;
+        scrollContactContent(delta);
+    });
+    
+    contentArea.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 30 : -30;
+        scrollContactContent(delta);
+    });
+    
+    contactScrollableContent.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 30 : -30;
+        scrollContactContent(delta);
+    });
+    
+    // Update scroll thumb when content is scrolled
+    contentArea.addEventListener('scroll', updateContactScrollThumb);
+}
+
+function dragContactWindow(e) {
+    if (!isContactDragging || document.getElementById('contact-window').classList.contains('fullscreen')) return;
+    const contactWindow = document.getElementById('contact-window');
+    contactWindow.style.position = 'absolute';
+    contactWindow.style.left = (e.clientX - contactDragOffset.x) + 'px';
+    contactWindow.style.top = (e.clientY - contactDragOffset.y) + 'px';
+}
+
+function stopContactDragging() {
+    isContactDragging = false;
+    document.removeEventListener('mousemove', dragContactWindow);
+    document.removeEventListener('mouseup', stopContactDragging);
+}
+
+function scrollContactContent(delta) {
+    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('contact-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    const currentScroll = contentArea.scrollTop;
+    const newScroll = Math.max(0, Math.min(maxScroll, currentScroll + delta));
+    contentArea.scrollTop = newScroll;
+    updateContactScrollThumb();
+}
+
+function updateContactScrollThumb() {
+    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('contact-scrollable-content');
+    const scrollThumb = document.getElementById('contact-scroll-thumb');
+    
+    if (!contentArea || !scrollableContent || !scrollThumb) return;
+    
+    const scrollPercentage = contentArea.scrollTop / (scrollableContent.scrollHeight - contentArea.clientHeight);
+    const trackHeight = scrollThumb.parentElement.clientHeight;
+    const thumbPosition = scrollPercentage * (trackHeight - scrollThumb.clientHeight);
+    scrollThumb.style.top = Math.max(0, thumbPosition) + 'px';
+}
+
+function scrollContactToPosition(e) {
+    const scrollThumb = document.getElementById('contact-scroll-thumb');
+    if (e.target === scrollThumb) return;
+    
+    const track = e.currentTarget;
+    const rect = track.getBoundingClientRect();
+    const clickY = e.clientY - rect.top;
+    const scrollPercentage = clickY / track.clientHeight;
+    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('contact-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    contentArea.scrollTop = scrollPercentage * maxScroll;
+    updateContactScrollThumb();
+}
+
+function dragContactScrollThumb(e) {
+    if (!isContactScrollDragging) return;
+    const scrollThumb = document.getElementById('contact-scroll-thumb');
+    const track = scrollThumb.parentElement;
+    const trackRect = track.getBoundingClientRect();
+    const newY = e.clientY - trackRect.top - contactScrollOffset;
+    const maxY = track.clientHeight - scrollThumb.clientHeight;
+    const clampedY = Math.max(0, Math.min(maxY, newY));
+    
+    scrollThumb.style.top = clampedY + 'px';
+    
+    const scrollPercentage = clampedY / maxY;
+    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('contact-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    contentArea.scrollTop = scrollPercentage * maxScroll;
+}
+
+function stopContactScrollDragging() {
+    isContactScrollDragging = false;
+    document.removeEventListener('mousemove', dragContactScrollThumb);
+    document.removeEventListener('mouseup', stopContactScrollDragging);
+}
+
+function minimizeContactWindow() {
+    const contactWindow = document.getElementById('contact-window');
+    contactWindow.style.transform = 'scale(0.1)';
+    contactWindow.style.opacity = '0.5';
+    setTimeout(() => {
+        contactWindow.style.transform = 'scale(1)';
+        contactWindow.style.opacity = '1';
+    }, 500);
+}
+
+function toggleContactFullscreen() {
+    const contactWindow = document.getElementById('contact-window');
+    contactWindow.classList.toggle('fullscreen');
+    if (contactWindow.classList.contains('fullscreen')) {
+        contactWindow.style.position = 'fixed';
+        contactWindow.style.left = '0';
+        contactWindow.style.top = '0';
+    } else {
+        contactWindow.style.position = 'relative';
+        contactWindow.style.left = 'auto';
+        contactWindow.style.top = 'auto';
+    }
+}
+
 // Close button functionality
 document.addEventListener('DOMContentLoaded', function() {
     const closeProjectsModal = document.getElementById('close-projects-modal');
+    const closeEmailModal = document.getElementById('close-email-modal');
+    
     if (closeProjectsModal) {
         closeProjectsModal.addEventListener('click', function() {
             const projectsModal = document.getElementById('projects-modal');
             projectsModal.classList.add('hidden');
+        });
+    }
+    
+    if (closeEmailModal) {
+        closeEmailModal.addEventListener('click', function() {
+            const emailModal = document.getElementById('email-modal');
+            emailModal.classList.add('hidden');
+        });
+    }
+    
+    // Email form functionality
+    const emailForm = document.getElementById('email-form');
+    if (emailForm) {
+        emailForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailMessage = document.getElementById('email-message');
+            const body = encodeURIComponent(emailMessage.value);
+            window.location.href = `mailto:eleodorandrei@gmail.com?subject=Contact%20depuis%20My%20Agile%20Toolkit&body=${body}`;
+            const emailModal = document.getElementById('email-modal');
+            emailModal.classList.add('hidden');
         });
     }
 });

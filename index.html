@@ -245,28 +245,116 @@
         </div>
     </div>
 
-    <!-- Modale pour Nouvel Email -->
+    <!-- Modale Contact avec style Windows 98 -->
     <div id="email-modal" class="modal hidden">
-        <div class="modal-content" style="width:408px; max-width:90vw; padding:0;">
-            <div style="background:#316AC5;color:white;padding:8px 12px;font-weight:bold;font-family:'MS Sans Serif',sans-serif;font-size:15px;border-bottom:1px solid #808080;">
-                Nouveau message
-                <span class="close-btn" id="close-email-modal" style="float:right;cursor:pointer;font-size:20px;">&times;</span>
+        <div class="win98-window" id="contact-window">
+            <div class="win98-title-bar" id="contact-title-bar">
+                <div class="win98-window-icon">📧</div>
+                <div class="win98-window-title">Contact - Andrei Eleodor Sirbu</div>
+                <div class="win98-window-controls">
+                    <div class="win98-control-button win98-minimize-btn" onclick="minimizeContactWindow()"></div>
+                    <div class="win98-control-button win98-maximize-btn" onclick="toggleContactFullscreen()"></div>
+                    <div class="win98-control-button win98-close-btn" id="close-email-modal"></div>
+                </div>
             </div>
-            <form id="email-form" style="padding:16px;">
-                <label style="font-size:13px;font-family:'MS Sans Serif',sans-serif;">À : </label>
-                <input type="text" value="eleodorandrei@gmail.com" readonly style="width:220px;font-size:13px;margin-bottom:10px;background:#eee;border:1px solid #aaa;padding:2px 6px;"><br>
-                
-                <!-- LinkedIn section -->
-                <label style="font-size:13px;font-family:'MS Sans Serif',sans-serif;">LinkedIn :</label>
-                <a href="https://www.linkedin.com/in/andrei-eleodor-sirbu/" target="_blank"
-                   style="display:inline-block;width:100%;font-size:13px;margin-bottom:10px;color:#0a66c2;text-decoration:underline;white-space:nowrap;overflow-x:auto;">
-                    https://www.linkedin.com/in/andrei-eleodor-sirbu/
-                </a><br>
-                
-                <label style="font-size:13px;font-family:'MS Sans Serif',sans-serif;">Message :</label><br>
-                <textarea id="email-message" rows="6" style="width:100%;font-size:13px;margin-bottom:12px;border:1px solid #aaa;padding:4px;resize:vertical;"></textarea><br>
-                <button type="submit" style="font-size:13px;padding:4px 18px;background:#e0e0e0;border:2px outset #fff;border-radius:2px;cursor:pointer;">Envoyer</button>
-            </form>
+            <div class="win98-window-content">
+                <div class="win98-content-area">
+                    <div class="win98-scrollable-content" id="contact-scrollable-content">
+                        
+                        <!-- Section Présentation -->
+                        <section class="modern-contact-section intro-section">
+                            <h2 class="modern-section-title">
+                                <span class="section-icon">👋</span>
+                                À Propos
+                            </h2>
+                            <div class="contact-content">
+                                <div class="profile-card">
+                                    <div class="profile-image">
+                                        <img src="img/portrait.jpeg" alt="Andrei Eleodor Sirbu" />
+                                    </div>
+                                    <div class="profile-info">
+                                        <h3 class="profile-name">Andrei Eleodor Sirbu</h3>
+                                        <p class="profile-title">Agile Coach & Product Manager</p>
+                                        <p class="profile-description">
+                                            Passionné par l'agilité et l'innovation, je développe des outils 
+                                            pour améliorer la collaboration et la productivité des équipes.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section Contact -->
+                        <section class="modern-contact-section contact-section">
+                            <h2 class="modern-section-title">
+                                <span class="section-icon">📞</span>
+                                Coordonnées
+                            </h2>
+                            <div class="contact-content">
+                                <div class="contact-methods">
+                                    <article class="contact-method">
+                                        <div class="contact-icon">✉️</div>
+                                        <div class="contact-details">
+                                            <h3 class="contact-label">Email</h3>
+                                            <a href="mailto:eleodorandrei@gmail.com" class="contact-link">
+                                                eleodorandrei@gmail.com
+                                            </a>
+                                        </div>
+                                    </article>
+                                    
+                                    <article class="contact-method">
+                                        <div class="contact-icon">💼</div>
+                                        <div class="contact-details">
+                                            <h3 class="contact-label">LinkedIn</h3>
+                                            <a href="https://www.linkedin.com/in/andrei-eleodor-sirbu/" 
+                                               target="_blank" class="contact-link">
+                                                linkedin.com/in/andrei-eleodor-sirbu
+                                            </a>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section Message -->
+                        <section class="modern-contact-section message-section">
+                            <h2 class="modern-section-title">
+                                <span class="section-icon">💬</span>
+                                Envoyer un Message
+                            </h2>
+                            <div class="contact-content">
+                                <form id="email-form" class="modern-contact-form">
+                                    <div class="form-group">
+                                        <label for="email-message" class="form-label">Votre message :</label>
+                                        <textarea 
+                                            id="email-message" 
+                                            name="message"
+                                            class="form-textarea"
+                                            rows="6" 
+                                            placeholder="Écrivez votre message ici..."
+                                            required
+                                        ></textarea>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn-primary">
+                                            <span class="btn-icon">📤</span>
+                                            Envoyer le message
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+                <div class="win98-scrollbar-vertical">
+                    <div class="win98-scrollbar-button win98-scroll-up" onclick="scrollContactContent(-20)"></div>
+                    <div class="win98-scrollbar-track" onclick="scrollContactToPosition(event)">
+                        <div class="win98-scrollbar-thumb" id="contact-scroll-thumb"></div>
+                    </div>
+                    <div class="win98-scrollbar-button win98-scroll-down" onclick="scrollContactContent(20)"></div>
+                </div>
+            </div>
         </div>
     </div>
 
