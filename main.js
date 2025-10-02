@@ -200,6 +200,13 @@ function initializeProjectsWindow() {
     
     // Update scroll thumb when content is scrolled
     projectsScrollableContent.parentElement.addEventListener('scroll', updateProjectsScrollThumb);
+    
+    // Add mousewheel scrolling support
+    projectsWindow.addEventListener('wheel', function(e) {
+        e.preventDefault(); // Prevent page scrolling
+        const delta = e.deltaY > 0 ? 20 : -20; // Scroll down or up
+        scrollProjectsContent(delta);
+    });
 }
 
 function dragProjectsWindow(e) {
