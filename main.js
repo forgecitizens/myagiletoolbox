@@ -32,19 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateTime();
     setInterval(updateTime, 1000);
 
-    // Redirection for "Mes Projets" icon
-    document.getElementById('icon-projects').addEventListener('click', function () {
-        document.getElementById('projects-modal').classList.remove('hidden');
-    });
-    document.getElementById('close-projects-modal').addEventListener('click', function () {
-        document.getElementById('projects-modal').classList.add('hidden');
-    });
-    // Optional: close modal when clicking outside content
-    document.getElementById('projects-modal').addEventListener('click', function (e) {
-        if (e.target === this) {
-            this.classList.add('hidden');
-        }
-    });
+    // Redirection for "Mes Projets" icon - handled by Windows 98 modal system
 
     // Show start menu on hover, hide when mouse leaves both button and menu
     const startButton = document.getElementById('start-button');
