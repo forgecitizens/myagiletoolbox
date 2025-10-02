@@ -134,38 +134,59 @@
 
     <!-- Modale pour Mes Projets -->
     <div id="projects-modal" class="modal hidden">
-        <div class="modal-content">
+        <div class="modal-content large-modal">
             <span class="close-btn" id="close-projects-modal">&times;</span>
             <h2>Mes Projets</h2>
-            <div class="projects-list">
-                <div class="project-item" onclick="window.location.href='Competences.html'" style="cursor:pointer;">
-                    <div class="project-illustration">
-                        <img src="../img/skills.png" alt="Projet 1" style="width:16px; height:16px; object-fit:cover;">
-                    </div>
-                    <div class="project-info">
-                        <h3>Mon tableau de compétences</h3>
-                        <p>Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.</p>
-                    </div>
-                </div>
-                <div class="project-item" onclick="window.location.href='Memory.html'" style="cursor:pointer;">
-                    <div class="project-illustration">
-                        <img src="../img/project2.png" alt="Projet 2" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Que savez-vous de Scrum ?</h3>
-                        <p>Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.</p>
+            <div class="projects-sections">
+                
+                <!-- Section 1: Outils pour Product Managers -->
+                <div class="project-section section-white">
+                    <h3 class="section-title">Outils pour Product Managers</h3>
+                    <div class="projects-list">
+                        <div class="project-item" onclick="window.location.href='burnup.html'" style="cursor:pointer;">
+                            <div class="project-illustration">
+                                <img src="img/project3.png" alt="Générateur de graphique burn-up" style="width:80px; height:80px; object-fit:cover;" />
+                            </div>
+                            <div class="project-info">
+                                <h4>Générateur de graphique burn-up</h4>
+                                <p>Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="project-item" onclick="window.location.href='burnup.html'" style="cursor:pointer;">
-                    <div class="project-illustration">
-                        <img src="../img/project3.png" alt="Projet 3" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Générateur de graphique burn-up</h3>
-                        <p>Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.</p>
+
+                <!-- Section 2: Outils pour Product Owners -->
+                <div class="project-section section-gray">
+                    <h3 class="section-title">Outils pour Product Owners</h3>
+                    <div class="projects-list">
+                        <div class="project-item" onclick="window.location.href='Competences.html'" style="cursor:pointer;">
+                            <div class="project-illustration">
+                                <img src="img/skills.png" alt="Projet 1" style="width:80px; height:80px; object-fit:cover;">
+                            </div>
+                            <div class="project-info">
+                                <h4>Mon tableau de compétences</h4>
+                                <p>Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Ajoutez d'autres projets ici -->
+
+                <!-- Section 3: Outils pour Scrum Masters -->
+                <div class="project-section section-white">
+                    <h3 class="section-title">Outils pour Scrum Masters</h3>
+                    <div class="projects-list">
+                        <div class="project-item" onclick="window.location.href='Memory.html'" style="cursor:pointer;">
+                            <div class="project-illustration">
+                                <img src="img/project2.png" alt="Que savez-vous de Scrum ?" style="width:80px; height:80px; object-fit:cover;" />
+                            </div>
+                            <div class="project-info">
+                                <h4>Que savez-vous de Scrum ?</h4>
+                                <p>Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
