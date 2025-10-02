@@ -510,9 +510,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if (emailForm) {
         emailForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const emailMessage = document.getElementById('email-message');
-            const body = encodeURIComponent(emailMessage.value);
-            window.location.href = `mailto:eleodorandrei@gmail.com?subject=Contact%20depuis%20My%20Agile%20Toolkit&body=${body}`;
+            
+            // Récupérer les données du formulaire
+            const firstname = document.getElementById('sender-firstname').value;
+            const lastname = document.getElementById('sender-lastname').value;
+            const senderEmail = document.getElementById('sender-email').value;
+            const message = document.getElementById('email-message').value;
+            
+            // Construire le corps de l'email
+            const emailBody = `Nom: ${firstname} ${lastname}
+Email: ${senderEmail}
+
+Message:
+${message}`;
+            
+            const subject = `Contact depuis My Agile Toolkit - ${firstname} ${lastname}`;
+            const body = encodeURIComponent(emailBody);
+            const encodedSubject = encodeURIComponent(subject);
+            
+            window.location.href = `mailto:eleodorandrei@gmail.com?subject=${encodedSubject}&body=${body}`;
+            
             const emailModal = document.getElementById('email-modal');
             emailModal.classList.add('hidden');
         });
