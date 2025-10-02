@@ -153,6 +153,11 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    pointer-events: none; /* Prevent background from intercepting clicks */
+}
+
+.modal .win98-window {
+    pointer-events: auto; /* Re-enable clicks on the actual window */
 }
 .modal.hidden {
     display: none;
