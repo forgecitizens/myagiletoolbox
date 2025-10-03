@@ -190,36 +190,34 @@ body {
 }
 
 .win98-title-bar {
-    height: 18px;
-    background: linear-gradient(90deg, #0000ff 0%, #0080ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #000080 0%, #000040 100%);
     color: white;
-    display: flex;
-    align-items: center;
-    padding: 2px;
-    cursor: move;
-    user-select: none;
-}
-
-.win98-window-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-}
-
-.win98-window-title {
-    flex: 1;
-    font-weight: bold;
+    padding: 4px 8px;
     font-size: 11px;
-    padding-left: 4px;
+    font-weight: bold;
+    cursor: move;
+    border-bottom: 1px solid #808080;
 }
 
-.win98-window-controls {
+.win98-title-icon {
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+.win98-title-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.win98-controls {
     display: flex;
     gap: 2px;
+    margin-left: auto;
 }
 
 .win98-control-button {
@@ -227,20 +225,23 @@ body {
     height: 14px;
     background: #c0c0c0;
     border: 1px outset #c0c0c0;
+    font-size: 8px;
+    line-height: 1;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    font-size: 8px;
-    font-weight: bold;
+    padding: 0;
+    margin: 0;
 }
 
 .win98-control-button:hover {
-    background: #d4d0c8;
+    background: #dfdfdf;
 }
 
 .win98-control-button:active {
     border: 1px inset #c0c0c0;
+    background: #a0a0a0;
 }
 
 .win98-minimize-btn::after {
@@ -280,63 +281,62 @@ body {
     min-height: 100%;
 }
 
-.win98-scrollbar-vertical {
+/* Windows 98 Scrollbar Styles */
+.win98-scrollbar {
     width: 16px;
     background: #c0c0c0;
     border-left: 1px solid #808080;
-    position: relative;
-    cursor: pointer;
-}
-
-.win98-scrollbar-track {
-    height: calc(100% - 32px);
-    margin: 16px 0;
-    background: #c0c0c0;
+    display: flex;
+    flex-direction: column;
     position: relative;
 }
 
-.win98-scrollbar-thumb {
-    width: 14px;
-    height: 40px;
-    background: #c0c0c0;
-    border: 1px outset #c0c0c0;
-    position: absolute;
-    top: 0;
-    left: 1px;
-    cursor: grab;
-}
-
-.win98-scrollbar-thumb:active {
-    cursor: grabbing;
-    border: 1px inset #c0c0c0;
-}
-
-.win98-scrollbar-button {
+.win98-scroll-button {
     width: 16px;
     height: 16px;
     background: #c0c0c0;
     border: 1px outset #c0c0c0;
+    font-size: 8px;
+    line-height: 1;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    font-size: 8px;
+    flex-shrink: 0;
 }
 
-.win98-scrollbar-button:hover {
-    background: #d4d0c8;
+.win98-scroll-button:hover {
+    background: #dfdfdf;
 }
 
-.win98-scrollbar-button:active {
+.win98-scroll-button:active {
     border: 1px inset #c0c0c0;
+    background: #a0a0a0;
 }
 
-.win98-scroll-up::after {
-    content: '▲';
+.win98-scroll-track {
+    flex: 1;
+    background: #c0c0c0;
+    position: relative;
+    cursor: pointer;
+    min-height: 50px;
 }
 
-.win98-scroll-down::after {
-    content: '▼';
+.win98-scroll-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: #dfdfdf;
+    border: 1px outset #dfdfdf;
+    cursor: grab;
+}
+
+.win98-scroll-thumb:active {
+    cursor: grabbing;
+    border: 1px inset #dfdfdf;
+    background: #c0c0c0;
 }
 
 /* Animation for window effects */
@@ -499,18 +499,18 @@ body {
 }
 
 @media (max-width: 480px) {
-    .modern-project-section {
+    .modern-contact-section {
         margin-bottom: 1rem;
         border-radius: 4px;
     }
     
-    .modern-section-title {
-        font-size: 1rem;
-        padding: 0.75rem;
+    .profile-image {
+        width: 80px;
+        height: 80px;
     }
     
-    .project-tags {
-        justify-content: center;
+    .profile-name {
+        font-size: 1.25rem;
     }
 }
 
