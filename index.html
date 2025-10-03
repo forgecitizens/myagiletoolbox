@@ -132,100 +132,79 @@
         </div>
     </div>
 
-    <!-- Modale pour Mes Projets avec style Windows 98 -->
+    <!-- Projects Modal with Windows 98 style -->
     <div id="projects-modal" class="modal hidden">
         <div class="win98-window" id="projects-window">
             <div class="win98-title-bar" id="projects-title-bar">
-                <div class="win98-window-icon">📁</div>
-                <div class="win98-window-title">Mes Projets - My Agile Toolkit</div>
-                <div class="win98-window-controls">
-                    <div class="win98-control-button win98-minimize-btn" onclick="minimizeProjectsWindow()"></div>
-                    <div class="win98-control-button win98-maximize-btn" onclick="toggleProjectsFullscreen()"></div>
-                    <div class="win98-control-button win98-close-btn" id="close-projects-modal"></div>
+                <span class="win98-title-icon">📁</span>
+                <span class="win98-title-text">Mes Projets - My Agile Toolkit</span>
+                <div class="win98-controls">
+                    <button class="win98-control-button" onclick="minimizeProjectsWindow()">_</button>
+                    <button class="win98-control-button" onclick="toggleProjectsFullscreen()">□</button>
+                    <button class="win98-control-button" id="close-projects-modal">×</button>
                 </div>
             </div>
             <div class="win98-window-content">
                 <div class="win98-content-area">
                     <div class="win98-scrollable-content" id="projects-scrollable-content">
                         
-                        <!-- Section 1: Outils pour Product Managers -->
-                        <section class="modern-project-section pm-section">
-                            <h2 class="modern-section-title">
-                                <span class="section-icon">🎯</span>
-                                Outils pour Product Managers
-                            </h2>
-                            <div class="modern-projects-grid">
-                                <article class="modern-project-card">
-                                    <div class="project-image">
-                                        <img src="img/project3.png" alt="Générateur de graphique burn-up" />
-                                    </div>
+                        <!-- Section 1: Product Managers -->
+                        <section class="projects-section">
+                            <h2>🎯 Outils pour Product Managers</h2>
+                            <div class="projects-grid">
+                                <article class="project-card">
                                     <div class="project-content">
                                         <h3 class="project-title">
                                             <a href="burnup.html" class="project-link">Générateur de graphique burn-up</a>
                                         </h3>
                                         <p class="project-description">
-                                            Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. 
-                                            Possibilité d'exporter/importer les résultats.
+                                            Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.
                                         </p>
                                         <div class="project-tags">
-                                            <span class="tag">Reporting</span>
-                                            <span class="tag">Analytics</span>
+                                            <span class="project-tag">Reporting</span>
+                                            <span class="project-tag">Analytics</span>
                                         </div>
                                     </div>
                                 </article>
                             </div>
                         </section>
 
-                        <!-- Section 2: Outils pour Product Owners -->
-                        <section class="modern-project-section po-section">
-                            <h2 class="modern-section-title">
-                                <span class="section-icon">📋</span>
-                                Outils pour Product Owners
-                            </h2>
-                            <div class="modern-projects-grid">
-                                <article class="modern-project-card">
-                                    <div class="project-image">
-                                        <img src="img/skills.png" alt="Mon tableau de compétences" />
-                                    </div>
+                        <!-- Section 2: Product Owners -->
+                        <section class="projects-section">
+                            <h2>📋 Outils pour Product Owners</h2>
+                            <div class="projects-grid">
+                                <article class="project-card">
                                     <div class="project-content">
                                         <h3 class="project-title">
                                             <a href="Competences.html" class="project-link">Mon tableau de compétences</a>
                                         </h3>
                                         <p class="project-description">
-                                            Un générateur de tableau de suivi des compétences d'une équipe. 
-                                            Possibilité d'exporter/importer les résultats.
+                                            Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.
                                         </p>
                                         <div class="project-tags">
-                                            <span class="tag">Team Management</span>
-                                            <span class="tag">Skills</span>
+                                            <span class="project-tag">Team Management</span>
+                                            <span class="project-tag">Skills</span>
                                         </div>
                                     </div>
                                 </article>
                             </div>
                         </section>
 
-                        <!-- Section 3: Outils pour Scrum Masters -->
-                        <section class="modern-project-section sm-section">
-                            <h2 class="modern-section-title">
-                                <span class="section-icon">🏃‍♂️</span>
-                                Outils pour Scrum Masters
-                            </h2>
-                            <div class="modern-projects-grid">
-                                <article class="modern-project-card">
-                                    <div class="project-image">
-                                        <img src="img/project2.png" alt="Que savez-vous de Scrum ?" />
-                                    </div>
+                        <!-- Section 3: Scrum Masters -->
+                        <section class="projects-section">
+                            <h2>🏃‍♂️ Outils pour Scrum Masters</h2>
+                            <div class="projects-grid">
+                                <article class="project-card">
                                     <div class="project-content">
                                         <h3 class="project-title">
                                             <a href="Memory.html" class="project-link">Que savez-vous de Scrum ?</a>
                                         </h3>
                                         <p class="project-description">
-                                            Un jeu de mémoire sur la thématique Scrum. 
-                                            Peut servir d'ice breaker pour vos équipes.
+                                            Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.
                                         </p>
                                         <div class="project-tags">
-                                            <span class="tag">Game</span>
-                                            <span class="tag">Team Building</span>
+                                            <span class="project-tag">Game</span>
+                                            <span class="project-tag">Ice Breaker</span>
                                         </div>
                                     </div>
                                 </article>
@@ -234,12 +213,12 @@
 
                     </div>
                 </div>
-                <div class="win98-scrollbar-vertical">
-                    <div class="win98-scrollbar-button win98-scroll-up" onclick="scrollProjectsContent(-20)"></div>
-                    <div class="win98-scrollbar-track" onclick="scrollProjectsToPosition(event)">
-                        <div class="win98-scrollbar-thumb" id="projects-scroll-thumb"></div>
+                <div class="win98-scrollbar">
+                    <button class="win98-scroll-button" onclick="scrollProjectsContent(-20)">▲</button>
+                    <div class="win98-scroll-track" onclick="scrollProjectsToPosition(event)">
+                        <div class="win98-scroll-thumb" id="projects-scroll-thumb"></div>
                     </div>
-                    <div class="win98-scrollbar-button win98-scroll-down" onclick="scrollProjectsContent(20)"></div>
+                    <button class="win98-scroll-button" onclick="scrollProjectsContent(20)">▼</button>
                 </div>
             </div>
         </div>
@@ -337,79 +316,6 @@
                         <div class="win98-scroll-thumb" id="contact-scroll-thumb"></div>
                     </div>
                     <button class="win98-scroll-button" onclick="scrollContactContent(20)">▼</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Modal with Windows 98 style -->
-    <div id="about-modal" class="modal hidden">
-        <div class="win98-window" id="about-window">
-            <div class="win98-title-bar" id="about-title-bar">
-                <span class="win98-title-icon">👤</span>
-                <span class="win98-title-text">À Propos - Andrei Eleodor Sirbu</span>
-                <div class="win98-controls">
-                    <button class="win98-control-button" onclick="minimizeAboutWindow()">_</button>
-                    <button class="win98-control-button" onclick="toggleAboutFullscreen()">□</button>
-                    <button class="win98-control-button" id="close-about-modal">×</button>
-                </div>
-            </div>
-            <div class="win98-window-content">
-                <div class="win98-content-area">
-                    <div class="win98-scrollable-content" id="about-scrollable-content">
-                        
-                        <!-- Section: À Propos -->
-                        <section class="about-section">
-                            <h2>👋 À Propos</h2>
-                            <div class="about-profile">
-                                <div class="about-avatar">
-                                    <img src="img/portrait.jpeg" alt="Andrei Eleodor Sirbu" class="profile-image">
-                                </div>
-                                <div class="about-info">
-                                    <h3>Andrei Eleodor Sirbu</h3>
-                                    <p class="about-title">Product Manager & Agile Coach</p>
-                                    <p class="about-description">
-                                        Passionné par l'agilité et la création de produits digitaux innovants. 
-                                        J'accompagne les équipes dans leur transformation agile et aide à construire 
-                                        des solutions qui répondent aux vrais besoins des utilisateurs.
-                                    </p>
-                                    <div class="about-skills">
-                                        <span class="skill-tag">Product Management</span>
-                                        <span class="skill-tag">Scrum Master</span>
-                                        <span class="skill-tag">Agile Coaching</span>
-                                        <span class="skill-tag">UX/UI</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="about-experience">
-                                <h3>🎯 Mon Approche</h3>
-                                <p>
-                                    Je crois en une approche collaborative et centrée utilisateur. Mon objectif est 
-                                    d'aider les équipes à livrer de la valeur rapidement tout en maintenant une 
-                                    qualité élevée et en favorisant l'amélioration continue.
-                                </p>
-                            </div>
-                            
-                            <div class="about-interests">
-                                <h3>🚀 Centres d'Intérêt</h3>
-                                <ul>
-                                    <li>Méthodologies Agiles (Scrum, Kanban, SAFe)</li>
-                                    <li>Design Thinking & Lean Startup</li>
-                                    <li>Data Analytics & Reporting</li>
-                                    <li>Innovation Digitale</li>
-                                </ul>
-                            </div>
-                        </section>
-
-                    </div>
-                </div>
-                <div class="win98-scrollbar">
-                    <button class="win98-scroll-button" onclick="scrollAboutContent(-20)">▲</button>
-                    <div class="win98-scroll-track" onclick="scrollAboutToPosition(event)">
-                        <div class="win98-scroll-thumb" id="about-scroll-thumb"></div>
-                    </div>
-                    <button class="win98-scroll-button" onclick="scrollAboutContent(20)">▼</button>
                 </div>
             </div>
         </div>
