@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add click event listeners for all icons
     aboutIcon.addEventListener('click', function () {
         selectIcon(this);
-        alert('À Propos - Fonctionnalité à implémenter !');
+        initializeAboutWindow(); // Changed from alert to open about modal
     });
 
     portfolioIcon.addEventListener('click', function () {
@@ -486,10 +486,175 @@ function toggleContactFullscreen() {
     }
 }
 
+// Windows 98 About Modal Functionality
+let isAboutDragging = false;
+let isAboutScrollDragging = false;
+let aboutDragOffset = { x: 0, y: 0 };
+let aboutScrollOffset = 0;
+
+function initializeAboutWindow() {
+    const aboutModal = document.getElementById('about-modal');
+    const aboutWindow = document.getElementById('about-window');
+    const aboutTitleBar = document.getElementById('about-title-bar');
+    const aboutScrollableContent = document.getElementById('about-scrollable-content');
+    const aboutScrollThumb = document.getElementById('about-scroll-thumb');
+    
+    // Show the modal
+    aboutModal.classList.remove('hidden');
+    
+    // Initialize scroll thumb position
+    updateAboutScrollThumb();
+    
+    // Window dragging functionality
+    aboutTitleBar.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('win98-control-button')) return;
+        isAboutDragging = true;
+        const rect = aboutWindow.getBoundingClientRect();
+        aboutDragOffset.x = e.clientX - rect.left;
+        aboutDragOffset.y = e.clientY - rect.top;
+        document.addEventListener('mousemove', dragAboutWindow);
+        document.addEventListener('mouseup', stopAboutDragging);
+    });
+    
+    // Scroll thumb dragging
+    aboutScrollThumb.addEventListener('mousedown', (e) => {
+        isAboutScrollDragging = true;
+        aboutScrollOffset = e.clientY - aboutScrollThumb.getBoundingClientRect().top;
+        document.addEventListener('mousemove', dragAboutScrollThumb);
+        document.addEventListener('mouseup', stopAboutScrollDragging);
+        e.preventDefault();
+    });
+    
+    // Add mousewheel scrolling support
+    const contentArea = aboutScrollableContent.parentElement;
+    
+    aboutWindow.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 30 : -30;
+        scrollAboutContent(delta);
+    });
+    
+    contentArea.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 30 : -30;
+        scrollAboutContent(delta);
+    });
+    
+    aboutScrollableContent.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 30 : -30;
+        scrollAboutContent(delta);
+    });
+    
+    // Update scroll thumb when content is scrolled
+    contentArea.addEventListener('scroll', updateAboutScrollThumb);
+}
+
+function dragAboutWindow(e) {
+    if (!isAboutDragging || document.getElementById('about-window').classList.contains('fullscreen')) return;
+    const aboutWindow = document.getElementById('about-window');
+    aboutWindow.style.position = 'absolute';
+    aboutWindow.style.left = (e.clientX - aboutDragOffset.x) + 'px';
+    aboutWindow.style.top = (e.clientY - aboutDragOffset.y) + 'px';
+}
+
+function stopAboutDragging() {
+    isAboutDragging = false;
+    document.removeEventListener('mousemove', dragAboutWindow);
+    document.removeEventListener('mouseup', stopAboutDragging);
+}
+
+function scrollAboutContent(delta) {
+    const contentArea = document.getElementById('about-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('about-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    const currentScroll = contentArea.scrollTop;
+    const newScroll = Math.max(0, Math.min(maxScroll, currentScroll + delta));
+    contentArea.scrollTop = newScroll;
+    updateAboutScrollThumb();
+}
+
+function updateAboutScrollThumb() {
+    const contentArea = document.getElementById('about-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('about-scrollable-content');
+    const scrollThumb = document.getElementById('about-scroll-thumb');
+    
+    if (!contentArea || !scrollableContent || !scrollThumb) return;
+    
+    const scrollPercentage = contentArea.scrollTop / (scrollableContent.scrollHeight - contentArea.clientHeight);
+    const trackHeight = scrollThumb.parentElement.clientHeight;
+    const thumbPosition = scrollPercentage * (trackHeight - scrollThumb.clientHeight);
+    scrollThumb.style.top = Math.max(0, thumbPosition) + 'px';
+}
+
+function scrollAboutToPosition(e) {
+    const scrollThumb = document.getElementById('about-scroll-thumb');
+    if (e.target === scrollThumb) return;
+    
+    const track = e.currentTarget;
+    const rect = track.getBoundingClientRect();
+    const clickY = e.clientY - rect.top;
+    const scrollPercentage = clickY / track.clientHeight;
+    const contentArea = document.getElementById('about-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('about-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    contentArea.scrollTop = scrollPercentage * maxScroll;
+    updateAboutScrollThumb();
+}
+
+function dragAboutScrollThumb(e) {
+    if (!isAboutScrollDragging) return;
+    const scrollThumb = document.getElementById('about-scroll-thumb');
+    const track = scrollThumb.parentElement;
+    const trackRect = track.getBoundingClientRect();
+    const newY = e.clientY - trackRect.top - aboutScrollOffset;
+    const maxY = track.clientHeight - scrollThumb.clientHeight;
+    const clampedY = Math.max(0, Math.min(maxY, newY));
+    
+    scrollThumb.style.top = clampedY + 'px';
+    
+    const scrollPercentage = clampedY / maxY;
+    const contentArea = document.getElementById('about-scrollable-content').parentElement;
+    const scrollableContent = document.getElementById('about-scrollable-content');
+    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
+    contentArea.scrollTop = scrollPercentage * maxScroll;
+}
+
+function stopAboutScrollDragging() {
+    isAboutScrollDragging = false;
+    document.removeEventListener('mousemove', dragAboutScrollThumb);
+    document.removeEventListener('mouseup', stopAboutScrollDragging);
+}
+
+function minimizeAboutWindow() {
+    const aboutWindow = document.getElementById('about-window');
+    aboutWindow.style.transform = 'scale(0.1)';
+    aboutWindow.style.opacity = '0.5';
+    setTimeout(() => {
+        aboutWindow.style.transform = 'scale(1)';
+        aboutWindow.style.opacity = '1';
+    }, 500);
+}
+
+function toggleAboutFullscreen() {
+    const aboutWindow = document.getElementById('about-window');
+    aboutWindow.classList.toggle('fullscreen');
+    if (aboutWindow.classList.contains('fullscreen')) {
+        aboutWindow.style.position = 'fixed';
+        aboutWindow.style.left = '0';
+        aboutWindow.style.top = '0';
+    } else {
+        aboutWindow.style.position = 'relative';
+        aboutWindow.style.left = 'auto';
+        aboutWindow.style.top = 'auto';
+    }
+}
+
 // Close button functionality
 document.addEventListener('DOMContentLoaded', function() {
     const closeProjectsModal = document.getElementById('close-projects-modal');
     const closeEmailModal = document.getElementById('close-email-modal');
+    const closeAboutModal = document.getElementById('close-about-modal'); // New close button
     
     if (closeProjectsModal) {
         closeProjectsModal.addEventListener('click', function() {
@@ -502,6 +667,13 @@ document.addEventListener('DOMContentLoaded', function() {
         closeEmailModal.addEventListener('click', function() {
             const emailModal = document.getElementById('email-modal');
             emailModal.classList.add('hidden');
+        });
+    }
+    
+    if (closeAboutModal) {
+        closeAboutModal.addEventListener('click', function() {
+            const aboutModal = document.getElementById('about-modal');
+            aboutModal.classList.add('hidden');
         });
     }
     
