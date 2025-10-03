@@ -134,19 +134,19 @@
 
     <!-- Projects Modal with Windows 98 style -->
     <div id="projects-modal" class="modal hidden">
-        <div class="win98-window" id="projects-window">
-            <div class="win98-title-bar" id="projects-title-bar">
-                <span class="win98-title-icon">📁</span>
-                <span class="win98-title-text">Mes Projets - My Agile Toolkit</span>
-                <div class="win98-controls">
-                    <button class="win98-control-button" onclick="minimizeProjectsWindow()">_</button>
-                    <button class="win98-control-button" onclick="toggleProjectsFullscreen()">□</button>
-                    <button class="win98-control-button" id="close-projects-modal">×</button>
+        <div class="window" id="projects-window">
+            <div class="title-bar" id="projects-title-bar">
+                <div class="window-icon">📁</div>
+                <div class="window-title">Mes Projets - My Agile Toolkit</div>
+                <div class="window-controls">
+                    <div class="control-button minimize-btn" onclick="minimizeProjectsWindow()"></div>
+                    <div class="control-button maximize-btn" onclick="toggleProjectsFullscreen()"></div>
+                    <div class="control-button close-btn" id="close-projects-modal"></div>
                 </div>
             </div>
-            <div class="win98-window-content">
-                <div class="win98-content-area">
-                    <div class="win98-scrollable-content" id="projects-scrollable-content">
+            <div class="window-content">
+                <div class="content-area">
+                    <div class="scrollable-content" id="projects-scrollable-content">
                         
                         <!-- Section 1: Product Managers -->
                         <section class="projects-section">
@@ -213,12 +213,12 @@
 
                     </div>
                 </div>
-                <div class="win98-scrollbar">
-                    <button class="win98-scroll-button" onclick="scrollProjectsContent(-20)">▲</button>
-                    <div class="win98-scroll-track" onclick="scrollProjectsToPosition(event)">
-                        <div class="win98-scroll-thumb" id="projects-scroll-thumb"></div>
+                <div class="scrollbar-vertical">
+                    <div class="scrollbar-button scroll-up" onclick="scrollProjectsContent(-20)"></div>
+                    <div class="scrollbar-track" onclick="scrollProjectsToPosition(event)">
+                        <div class="scrollbar-thumb" id="projects-scroll-thumb"></div>
                     </div>
-                    <button class="win98-scroll-button" onclick="scrollProjectsContent(20)">▼</button>
+                    <div class="scrollbar-button scroll-down" onclick="scrollProjectsContent(20)"></div>
                 </div>
             </div>
         </div>
@@ -226,19 +226,19 @@
 
     <!-- Contact Modal with Windows 98 style -->
     <div id="email-modal" class="modal hidden">
-        <div class="win98-window" id="contact-window">
-            <div class="win98-title-bar" id="contact-title-bar">
-                <span class="win98-title-icon">📧</span>
-                <span class="win98-title-text">Contact - Andrei Eleodor Sirbu</span>
-                <div class="win98-controls">
-                    <button class="win98-control-button" onclick="minimizeContactWindow()">_</button>
-                    <button class="win98-control-button" onclick="toggleContactFullscreen()">□</button>
-                    <button class="win98-control-button" id="close-email-modal">×</button>
+        <div class="window" id="contact-window">
+            <div class="title-bar" id="contact-title-bar">
+                <div class="window-icon">📧</div>
+                <div class="window-title">Contact - Andrei Eleodor Sirbu</div>
+                <div class="window-controls">
+                    <div class="control-button minimize-btn" onclick="minimizeContactWindow()"></div>
+                    <div class="control-button maximize-btn" onclick="toggleContactFullscreen()"></div>
+                    <div class="control-button close-btn" id="close-email-modal"></div>
                 </div>
             </div>
-            <div class="win98-window-content">
-                <div class="win98-content-area">
-                    <div class="win98-scrollable-content" id="contact-scrollable-content">
+            <div class="window-content">
+                <div class="content-area">
+                    <div class="scrollable-content" id="contact-scrollable-content">
                         
                         <!-- Section 1: À Propos -->
                         <section class="contact-section">
@@ -310,12 +310,12 @@
 
                     </div>
                 </div>
-                <div class="win98-scrollbar">
-                    <button class="win98-scroll-button" onclick="scrollContactContent(-20)">▲</button>
-                    <div class="win98-scroll-track" onclick="scrollContactToPosition(event)">
-                        <div class="win98-scroll-thumb" id="contact-scroll-thumb"></div>
+                <div class="scrollbar-vertical">
+                    <div class="scrollbar-button scroll-up" onclick="scrollContactContent(-20)"></div>
+                    <div class="scrollbar-track" onclick="scrollContactToPosition(event)">
+                        <div class="scrollbar-thumb" id="contact-scroll-thumb"></div>
                     </div>
-                    <button class="win98-scroll-button" onclick="scrollContactContent(20)">▼</button>
+                    <div class="scrollbar-button scroll-down" onclick="scrollContactContent(20)"></div>
                 </div>
             </div>
         </div>
