@@ -6,6 +6,172 @@ function updateTime() {
     document.getElementById('current-time').textContent = timeString;
 }
 
+// Unified Modal System
+const modalTitles = {
+    'about': 'À propos',
+    'portfolio': 'Mon portfolio', 
+    'projects': 'Mes projets',
+    'contact': 'Contact'
+};
+
+let activeModals = new Set();
+let dragState = { isDragging: false, element: null, offset: { x: 0, y: 0 } };
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId + '-modal');
+    if (!modal) return;
+    
+    const window = modal.querySelector('.window');
+    
+    modal.style.display = 'block';
+    window.style.left = (50 + Math.random() * 100) + 'px';
+    window.style.top = (50 + Math.random() * 100) + 'px';
+
+    // Add to active modals
+    activeModals.add(modalId);
+
+    // Add taskbar entry
+    addTaskbarEntry(modalTitles[modalId], modal);
+
+    // Initialize window controls
+    initializeWindowControls(modal, modalId);
+
+    // Make draggable
+    makeWindowDraggable(window);
+    
+    // Initialize scrolling
+    initializeScrolling(window);
+}
+
+function initializeWindowControls(modal, modalId) {
+    const window = modal.querySelector('.window');
+    
+    // Close button
+    const closeButton = window.querySelector('.close-button');
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            modal.style.display = 'none';
+            activeModals.delete(modalId);
+            removeTaskbarEntry(modalTitles[modalId]);
+        });
+    }
+
+    // Minimize button
+    const minimizeButton = window.querySelector('.minimize-button');
+    if (minimizeButton) {
+        minimizeButton.addEventListener('click', function() {
+            window.style.display = 'none';
+        });
+    }
+
+    // Maximize button
+    const maximizeButton = window.querySelector('.maximize-button');
+    if (maximizeButton) {
+        let isMaximized = false;
+        let originalSize = { width: window.style.width, height: window.style.height, left: window.style.left, top: window.style.top };
+        
+        maximizeButton.addEventListener('click', function() {
+            if (isMaximized) {
+                // Restore
+                window.style.width = originalSize.width || '600px';
+                window.style.height = originalSize.height || '400px';
+                window.style.left = originalSize.left || '50px';
+                window.style.top = originalSize.top || '50px';
+                window.style.position = 'absolute';
+                isMaximized = false;
+            } else {
+                // Maximize
+                originalSize = {
+                    width: window.style.width,
+                    height: window.style.height,
+                    left: window.style.left,
+                    top: window.style.top
+                };
+                window.style.width = 'calc(100vw - 10px)';
+                window.style.height = 'calc(100vh - 50px)';
+                window.style.left = '5px';
+                window.style.top = '5px';
+                window.style.position = 'fixed';
+                isMaximized = true;
+            }
+        });
+    }
+}
+
+function makeWindowDraggable(window) {
+    const titleBar = window.querySelector('.title-bar');
+    if (!titleBar) return;
+    
+    titleBar.addEventListener('mousedown', function(e) {
+        // Don't drag if clicking on control buttons
+        if (e.target.classList.contains('control-button')) return;
+        
+        dragState.isDragging = true;
+        dragState.element = window;
+        
+        const rect = window.getBoundingClientRect();
+        dragState.offset.x = e.clientX - rect.left;
+        dragState.offset.y = e.clientY - rect.top;
+        
+        document.addEventListener('mousemove', handleDrag);
+        document.addEventListener('mouseup', stopDrag);
+        
+        e.preventDefault();
+    });
+}
+
+function handleDrag(e) {
+    if (!dragState.isDragging || !dragState.element) return;
+    
+    const window = dragState.element;
+    window.style.left = (e.clientX - dragState.offset.x) + 'px';
+    window.style.top = (e.clientY - dragState.offset.y) + 'px';
+    window.style.position = 'absolute';
+}
+
+function stopDrag() {
+    dragState.isDragging = false;
+    dragState.element = null;
+    document.removeEventListener('mousemove', handleDrag);
+    document.removeEventListener('mouseup', stopDrag);
+}
+
+function initializeScrolling(window) {
+    const contentArea = window.querySelector('.content-area');
+    const scrollbar = window.querySelector('.scrollbar-vertical');
+    
+    if (!contentArea || !scrollbar) return;
+    
+    // Mouse wheel scrolling
+    window.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const scrollAmount = e.deltaY > 0 ? 30 : -30;
+        contentArea.scrollTop = Math.max(0, contentArea.scrollTop + scrollAmount);
+        updateScrollThumb(contentArea, scrollbar);
+    });
+    
+    // Update scroll thumb position
+    contentArea.addEventListener('scroll', function() {
+        updateScrollThumb(contentArea, scrollbar);
+    });
+    
+    // Initialize scroll thumb
+    updateScrollThumb(contentArea, scrollbar);
+}
+
+function updateScrollThumb(contentArea, scrollbar) {
+    const thumb = scrollbar.querySelector('.scroll-thumb');
+    if (!thumb) return;
+    
+    const scrollPercentage = contentArea.scrollTop / (contentArea.scrollHeight - contentArea.clientHeight);
+    const trackHeight = scrollbar.clientHeight;
+    const thumbHeight = Math.max(20, (contentArea.clientHeight / contentArea.scrollHeight) * trackHeight);
+    const thumbPosition = scrollPercentage * (trackHeight - thumbHeight);
+    
+    thumb.style.height = thumbHeight + 'px';
+    thumb.style.top = Math.max(0, thumbPosition) + 'px';
+}
+
 // Sélection des icônes
 function selectIcon(icon) {
     // Désélectionner toutes les icônes
@@ -27,6 +193,17 @@ function shutdown() {
     }
 }
 
+// Taskbar management
+function addTaskbarEntry(title, modal) {
+    // Simple taskbar functionality - could be expanded
+    console.log('Added taskbar entry:', title);
+}
+
+function removeTaskbarEntry(title) {
+    // Simple taskbar functionality - could be expanded
+    console.log('Removed taskbar entry:', title);
+}
+
 // Initialisation après chargement du DOM
 document.addEventListener('DOMContentLoaded', function () {
     updateTime();
@@ -37,27 +214,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const startMenu = document.getElementById('start-menu');
     let menuTimeout;
 
-    startButton.addEventListener('mouseenter', () => {
-        clearTimeout(menuTimeout);
-        startMenu.classList.remove('hidden');
-    });
+    if (startButton && startMenu) {
+        startButton.addEventListener('mouseenter', () => {
+            clearTimeout(menuTimeout);
+            startMenu.classList.remove('hidden');
+        });
 
-    startButton.addEventListener('mouseleave', () => {
-        menuTimeout = setTimeout(() => {
+        startButton.addEventListener('mouseleave', () => {
+            menuTimeout = setTimeout(() => {
+                startMenu.classList.add('hidden');
+            }, 150);
+        });
+
+        startMenu.addEventListener('mouseenter', () => {
+            clearTimeout(menuTimeout);
+        });
+
+        startMenu.addEventListener('mouseleave', () => {
             startMenu.classList.add('hidden');
-        }, 150);
-    });
+        });
 
-    startMenu.addEventListener('mouseenter', () => {
-        clearTimeout(menuTimeout);
-    });
-
-    startMenu.addEventListener('mouseleave', () => {
+        // Remove default open menu
         startMenu.classList.add('hidden');
-    });
-
-    // Remove default open menu
-    startMenu.classList.add('hidden');
+    }
 
     // Make desktop icons draggable and droppable
     const desktop = document.querySelector('.desktop');
@@ -108,381 +287,41 @@ document.addEventListener('DOMContentLoaded', function () {
     const contactIcon = document.querySelector('.icon-contact');
 
     // Add click event listeners for all icons
-    aboutIcon.addEventListener('click', function () {
-        selectIcon(this);
-        alert('Fonctionnalité À propos - À venir bientôt !');
-    });
-
-    portfolioIcon.addEventListener('click', function () {
-        selectIcon(this);
-        alert('Mon Portfolio - Fonctionnalité à implémenter !');
-    });
-
-    trashIcon.addEventListener('click', function () {
-        selectIcon(this);
-        alert('Corbeille (Pleine) - Fonctionnalité à implémenter !');
-    });
-
-    // Projects icon to select and open modal
-    projectsIcon.addEventListener('click', function () {
-        selectIcon(this);
-        initializeProjectsWindow();
-    });
-
-    // Contact icon to select and open contact modal
-    contactIcon.addEventListener('click', function () {
-        selectIcon(this);
-        initializeContactWindow();
-    });
-});
-
-// Windows 98 Projects Modal Functionality
-let isProjectsDragging = false;
-let isProjectsScrollDragging = false;
-let projectsDragOffset = { x: 0, y: 0 };
-let projectsScrollOffset = 0;
-
-function initializeProjectsWindow() {
-    const projectsModal = document.getElementById('projects-modal');
-    const projectsWindow = document.getElementById('projects-window');
-    const projectsTitleBar = document.getElementById('projects-title-bar');
-    const projectsScrollableContent = document.getElementById('projects-scrollable-content');
-    const projectsScrollThumb = document.getElementById('projects-scroll-thumb');
-    
-    // Show the modal
-    projectsModal.classList.remove('hidden');
-    
-    // Initialize scroll thumb position
-    updateProjectsScrollThumb();
-    
-    // Window dragging functionality
-    projectsTitleBar.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('win98-control-button')) return;
-        isProjectsDragging = true;
-        const rect = projectsWindow.getBoundingClientRect();
-        projectsDragOffset.x = e.clientX - rect.left;
-        projectsDragOffset.y = e.clientY - rect.top;
-        document.addEventListener('mousemove', dragProjectsWindow);
-        document.addEventListener('mouseup', stopProjectsDragging);
-    });
-    
-    // Scroll thumb dragging
-    projectsScrollThumb.addEventListener('mousedown', (e) => {
-        isProjectsScrollDragging = true;
-        projectsScrollOffset = e.clientY - projectsScrollThumb.getBoundingClientRect().top;
-        document.addEventListener('mousemove', dragProjectsScrollThumb);
-        document.addEventListener('mouseup', stopProjectsScrollDragging);
-        e.preventDefault();
-    });
-    
-    // Update scroll thumb when content is scrolled
-    projectsScrollableContent.parentElement.addEventListener('scroll', updateProjectsScrollThumb);
-    
-    // Add mousewheel scrolling support
-    const contentArea = projectsScrollableContent.parentElement;
-    
-    projectsWindow.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 30 : -30;
-        scrollProjectsContent(delta);
-    });
-    
-    contentArea.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 30 : -30;
-        scrollProjectsContent(delta);
-    });
-    
-    projectsScrollableContent.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 30 : -30;
-        scrollProjectsContent(delta);
-    });
-}
-
-function dragProjectsWindow(e) {
-    if (!isProjectsDragging || document.getElementById('projects-window').classList.contains('fullscreen')) return;
-    const projectsWindow = document.getElementById('projects-window');
-    projectsWindow.style.position = 'absolute';
-    projectsWindow.style.left = (e.clientX - projectsDragOffset.x) + 'px';
-    projectsWindow.style.top = (e.clientY - projectsDragOffset.y) + 'px';
-}
-
-function stopProjectsDragging() {
-    isProjectsDragging = false;
-    document.removeEventListener('mousemove', dragProjectsWindow);
-    document.removeEventListener('mouseup', stopProjectsDragging);
-}
-
-function scrollProjectsContent(delta) {
-    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('projects-scrollable-content');
-    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
-    const currentScroll = contentArea.scrollTop;
-    const newScroll = Math.max(0, Math.min(maxScroll, currentScroll + delta));
-    contentArea.scrollTop = newScroll;
-    updateProjectsScrollThumb();
-}
-
-function updateProjectsScrollThumb() {
-    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('projects-scrollable-content');
-    const scrollThumb = document.getElementById('projects-scroll-thumb');
-    
-    if (!contentArea || !scrollableContent || !scrollThumb) return;
-    
-    const scrollPercentage = contentArea.scrollTop / (scrollableContent.scrollHeight - contentArea.clientHeight);
-    const trackHeight = scrollThumb.parentElement.clientHeight;
-    const thumbPosition = scrollPercentage * (trackHeight - scrollThumb.clientHeight);
-    scrollThumb.style.top = Math.max(0, thumbPosition) + 'px';
-}
-
-function scrollProjectsToPosition(e) {
-    const scrollThumb = document.getElementById('projects-scroll-thumb');
-    if (e.target === scrollThumb) return;
-    
-    const track = e.currentTarget;
-    const rect = track.getBoundingClientRect();
-    const clickY = e.clientY - rect.top;
-    const scrollPercentage = clickY / track.clientHeight;
-    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('projects-scrollable-content');
-    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
-    contentArea.scrollTop = scrollPercentage * maxScroll;
-    updateProjectsScrollThumb();
-}
-
-function dragProjectsScrollThumb(e) {
-    if (!isProjectsScrollDragging) return;
-    const scrollThumb = document.getElementById('projects-scroll-thumb');
-    const track = scrollThumb.parentElement;
-    const trackRect = track.getBoundingClientRect();
-    const newY = e.clientY - trackRect.top - projectsScrollOffset;
-    const maxY = track.clientHeight - scrollThumb.clientHeight;
-    const clampedY = Math.max(0, Math.min(maxY, newY));
-    
-    scrollThumb.style.top = clampedY + 'px';
-    
-    const scrollPercentage = clampedY / maxY;
-    const contentArea = document.getElementById('projects-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('projects-scrollable-content');
-    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
-    contentArea.scrollTop = scrollPercentage * maxScroll;
-}
-
-function stopProjectsScrollDragging() {
-    isProjectsScrollDragging = false;
-    document.removeEventListener('mousemove', dragProjectsScrollThumb);
-    document.removeEventListener('mouseup', stopProjectsScrollDragging);
-}
-
-function minimizeProjectsWindow() {
-    const projectsWindow = document.getElementById('projects-window');
-    projectsWindow.style.transform = 'scale(0.1)';
-    projectsWindow.style.opacity = '0.5';
-    setTimeout(() => {
-        projectsWindow.style.transform = 'scale(1)';
-        projectsWindow.style.opacity = '1';
-    }, 500);
-}
-
-function toggleProjectsFullscreen() {
-    const projectsWindow = document.getElementById('projects-window');
-    projectsWindow.classList.toggle('fullscreen');
-    if (projectsWindow.classList.contains('fullscreen')) {
-        projectsWindow.style.position = 'fixed';
-        projectsWindow.style.left = '0';
-        projectsWindow.style.top = '0';
-    } else {
-        projectsWindow.style.position = 'relative';
-        projectsWindow.style.left = 'auto';
-        projectsWindow.style.top = 'auto';
-    }
-}
-
-// Windows 98 Contact Modal Functionality
-let isContactDragging = false;
-let isContactScrollDragging = false;
-let contactDragOffset = { x: 0, y: 0 };
-let contactScrollOffset = 0;
-
-function initializeContactWindow() {
-    const emailModal = document.getElementById('email-modal');
-    const contactWindow = document.getElementById('contact-window');
-    const contactTitleBar = document.getElementById('contact-title-bar');
-    const contactScrollableContent = document.getElementById('contact-scrollable-content');
-    const contactScrollThumb = document.getElementById('contact-scroll-thumb');
-    
-    // Show the modal
-    emailModal.classList.remove('hidden');
-    
-    // Initialize scroll thumb position
-    updateContactScrollThumb();
-    
-    // Window dragging functionality
-    contactTitleBar.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('win98-control-button')) return;
-        isContactDragging = true;
-        const rect = contactWindow.getBoundingClientRect();
-        contactDragOffset.x = e.clientX - rect.left;
-        contactDragOffset.y = e.clientY - rect.top;
-        document.addEventListener('mousemove', dragContactWindow);
-        document.addEventListener('mouseup', stopContactDragging);
-    });
-    
-    // Scroll thumb dragging
-    contactScrollThumb.addEventListener('mousedown', (e) => {
-        isContactScrollDragging = true;
-        contactScrollOffset = e.clientY - contactScrollThumb.getBoundingClientRect().top;
-        document.addEventListener('mousemove', dragContactScrollThumb);
-        document.addEventListener('mouseup', stopContactScrollDragging);
-        e.preventDefault();
-    });
-    
-    // Add mousewheel scrolling support
-    const contentArea = contactScrollableContent.parentElement;
-    
-    contactWindow.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 30 : -30;
-        scrollContactContent(delta);
-    });
-    
-    contentArea.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 30 : -30;
-        scrollContactContent(delta);
-    });
-    
-    contactScrollableContent.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 30 : -30;
-        scrollContactContent(delta);
-    });
-    
-    // Update scroll thumb when content is scrolled
-    contentArea.addEventListener('scroll', updateContactScrollThumb);
-}
-
-function dragContactWindow(e) {
-    if (!isContactDragging || document.getElementById('contact-window').classList.contains('fullscreen')) return;
-    const contactWindow = document.getElementById('contact-window');
-    contactWindow.style.position = 'absolute';
-    contactWindow.style.left = (e.clientX - contactDragOffset.x) + 'px';
-    contactWindow.style.top = (e.clientY - contactDragOffset.y) + 'px';
-}
-
-function stopContactDragging() {
-    isContactDragging = false;
-    document.removeEventListener('mousemove', dragContactWindow);
-    document.removeEventListener('mouseup', stopContactDragging);
-}
-
-function scrollContactContent(delta) {
-    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('contact-scrollable-content');
-    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
-    const currentScroll = contentArea.scrollTop;
-    const newScroll = Math.max(0, Math.min(maxScroll, currentScroll + delta));
-    contentArea.scrollTop = newScroll;
-    updateContactScrollThumb();
-}
-
-function updateContactScrollThumb() {
-    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('contact-scrollable-content');
-    const scrollThumb = document.getElementById('contact-scroll-thumb');
-    
-    if (!contentArea || !scrollableContent || !scrollThumb) return;
-    
-    const scrollPercentage = contentArea.scrollTop / (scrollableContent.scrollHeight - contentArea.clientHeight);
-    const trackHeight = scrollThumb.parentElement.clientHeight;
-    const thumbPosition = scrollPercentage * (trackHeight - scrollThumb.clientHeight);
-    scrollThumb.style.top = Math.max(0, thumbPosition) + 'px';
-}
-
-function scrollContactToPosition(e) {
-    const scrollThumb = document.getElementById('contact-scroll-thumb');
-    if (e.target === scrollThumb) return;
-    
-    const track = e.currentTarget;
-    const rect = track.getBoundingClientRect();
-    const clickY = e.clientY - rect.top;
-    const scrollPercentage = clickY / track.clientHeight;
-    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('contact-scrollable-content');
-    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
-    contentArea.scrollTop = scrollPercentage * maxScroll;
-    updateContactScrollThumb();
-}
-
-function dragContactScrollThumb(e) {
-    if (!isContactScrollDragging) return;
-    const scrollThumb = document.getElementById('contact-scroll-thumb');
-    const track = scrollThumb.parentElement;
-    const trackRect = track.getBoundingClientRect();
-    const newY = e.clientY - trackRect.top - contactScrollOffset;
-    const maxY = track.clientHeight - scrollThumb.clientHeight;
-    const clampedY = Math.max(0, Math.min(maxY, newY));
-    
-    scrollThumb.style.top = clampedY + 'px';
-    
-    const scrollPercentage = clampedY / maxY;
-    const contentArea = document.getElementById('contact-scrollable-content').parentElement;
-    const scrollableContent = document.getElementById('contact-scrollable-content');
-    const maxScroll = scrollableContent.scrollHeight - contentArea.clientHeight;
-    contentArea.scrollTop = scrollPercentage * maxScroll;
-}
-
-function stopContactScrollDragging() {
-    isContactScrollDragging = false;
-    document.removeEventListener('mousemove', dragContactScrollThumb);
-    document.removeEventListener('mouseup', stopContactScrollDragging);
-}
-
-function minimizeContactWindow() {
-    const contactWindow = document.getElementById('contact-window');
-    contactWindow.style.transform = 'scale(0.1)';
-    contactWindow.style.opacity = '0.5';
-    setTimeout(() => {
-        contactWindow.style.transform = 'scale(1)';
-        contactWindow.style.opacity = '1';
-    }, 500);
-}
-
-function toggleContactFullscreen() {
-    const contactWindow = document.getElementById('contact-window');
-    contactWindow.classList.toggle('fullscreen');
-    if (contactWindow.classList.contains('fullscreen')) {
-        contactWindow.style.position = 'fixed';
-        contactWindow.style.left = '0';
-        contactWindow.style.top = '0';
-    } else {
-        contactWindow.style.position = 'relative';
-        contactWindow.style.left = 'auto';
-        contactWindow.style.top = 'auto';
-    }
-}
-
-// Close button functionality and email form
-document.addEventListener('DOMContentLoaded', function() {
-    const closeProjectsModal = document.getElementById('close-projects-modal');
-    const closeEmailModal = document.getElementById('close-email-modal');
-    
-    if (closeProjectsModal) {
-        closeProjectsModal.addEventListener('click', function() {
-            const projectsModal = document.getElementById('projects-modal');
-            projectsModal.classList.add('hidden');
+    if (aboutIcon) {
+        aboutIcon.addEventListener('click', function () {
+            selectIcon(this);
+            openModal('about');
         });
     }
-    
-    if (closeEmailModal) {
-        closeEmailModal.addEventListener('click', function() {
-            const emailModal = document.getElementById('email-modal');
-            emailModal.classList.add('hidden');
+
+    if (portfolioIcon) {
+        portfolioIcon.addEventListener('click', function () {
+            selectIcon(this);
+            openModal('portfolio');
         });
     }
-    
+
+    if (trashIcon) {
+        trashIcon.addEventListener('click', function () {
+            selectIcon(this);
+            alert('Corbeille (Pleine) - Fonctionnalité à implémenter !');
+        });
+    }
+
+    if (projectsIcon) {
+        projectsIcon.addEventListener('click', function () {
+            selectIcon(this);
+            openModal('projects');
+        });
+    }
+
+    if (contactIcon) {
+        contactIcon.addEventListener('click', function () {
+            selectIcon(this);
+            openModal('contact');
+        });
+    }
+
     // Email form functionality
     const emailForm = document.getElementById('email-form');
     if (emailForm) {
@@ -508,8 +347,14 @@ ${message}`;
             
             window.location.href = `mailto:eleodorandrei@gmail.com?subject=${encodedSubject}&body=${body}`;
             
-            const emailModal = document.getElementById('email-modal');
-            emailModal.classList.add('hidden');
+            // Close the contact modal
+            const contactModal = document.getElementById('contact-modal');
+            if (contactModal) {
+                contactModal.style.display = 'none';
+                activeModals.delete('contact');
+                removeTaskbarEntry('Contact');
+            }
         });
     }
 });
+

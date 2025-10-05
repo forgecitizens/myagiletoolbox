@@ -132,190 +132,173 @@
         </div>
     </div>
 
-    <!-- Projects Modal with Windows 98 style -->
-    <div id="projects-modal" class="modal hidden">
-        <div class="window" id="projects-window">
-            <div class="title-bar" id="projects-title-bar">
-                <div class="window-icon">📁</div>
-                <div class="window-title">Mes Projets - My Agile Toolkit</div>
+    <!-- About Modal -->
+    <div id="about-modal" class="modal hidden">
+        <div class="window" id="about-window">
+            <div class="title-bar" id="about-title-bar">
+                <div class="window-icon">�</div>
+                <div class="window-title">À Propos - Andrei Eleodor Sirbu</div>
                 <div class="window-controls">
-                    <div class="control-button minimize-btn" onclick="minimizeProjectsWindow()"></div>
-                    <div class="control-button maximize-btn" onclick="toggleProjectsFullscreen()"></div>
-                    <div class="control-button close-btn" id="close-projects-modal"></div>
+                    <div class="control-button minimize-btn" onclick="minimizeWindow('about')"></div>
+                    <div class="control-button maximize-btn" onclick="toggleFullscreen('about')"></div>
+                    <div class="control-button close-btn" onclick="closeModal('about')"></div>
                 </div>
             </div>
             <div class="window-content">
                 <div class="content-area">
-                    <div class="scrollable-content" id="projects-scrollable-content">
-                        
-                        <!-- Section 1: Product Managers -->
-                        <section class="projects-section">
-                            <h2>🎯 Outils pour Product Managers</h2>
-                            <div class="projects-grid">
-                                <article class="project-card">
-                                    <div class="project-content">
-                                        <h3 class="project-title">
-                                            <a href="burnup.html" class="project-link">Générateur de graphique burn-up</a>
-                                        </h3>
-                                        <p class="project-description">
-                                            Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.
-                                        </p>
-                                        <div class="project-tags">
-                                            <span class="project-tag">Reporting</span>
-                                            <span class="project-tag">Analytics</span>
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                        </section>
-
-                        <!-- Section 2: Product Owners -->
-                        <section class="projects-section">
-                            <h2>📋 Outils pour Product Owners</h2>
-                            <div class="projects-grid">
-                                <article class="project-card">
-                                    <div class="project-content">
-                                        <h3 class="project-title">
-                                            <a href="Competences.html" class="project-link">Mon tableau de compétences</a>
-                                        </h3>
-                                        <p class="project-description">
-                                            Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.
-                                        </p>
-                                        <div class="project-tags">
-                                            <span class="project-tag">Team Management</span>
-                                            <span class="project-tag">Skills</span>
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                        </section>
-
-                        <!-- Section 3: Scrum Masters -->
-                        <section class="projects-section">
-                            <h2>🏃‍♂️ Outils pour Scrum Masters</h2>
-                            <div class="projects-grid">
-                                <article class="project-card">
-                                    <div class="project-content">
-                                        <h3 class="project-title">
-                                            <a href="Memory.html" class="project-link">Que savez-vous de Scrum ?</a>
-                                        </h3>
-                                        <p class="project-description">
-                                            Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.
-                                        </p>
-                                        <div class="project-tags">
-                                            <span class="project-tag">Game</span>
-                                            <span class="project-tag">Ice Breaker</span>
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                        </section>
-
+                    <div class="scrollable-content" id="about-scrollable-content">
+                        <div class="sample-text">
+                            <h3>À Propos de Moi</h3>
+                            <p>Je suis Andrei Eleodor Sirbu, passionné par l'agilité et l'innovation digitale.</p>
+                            <p>Product Manager et Agile Coach, j'accompagne les équipes dans leur transformation vers plus d'efficacité et de collaboration.</p>
+                            <h3>Mon Expertise</h3>
+                            <p>• Product Management</p>
+                            <p>• Scrum Master Certifié</p>
+                            <p>• Agile Coaching</p>
+                            <p>• Lean Startup</p>
+                            <p>• Design Thinking</p>
+                            <h3>Ma Mission</h3>
+                            <p>Aider les organisations à créer des produits qui répondent vraiment aux besoins des utilisateurs, tout en optimisant les processus de développement.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="scrollbar-vertical">
-                    <div class="scrollbar-button scroll-up" onclick="scrollProjectsContent(-20)"></div>
-                    <div class="scrollbar-track" onclick="scrollProjectsToPosition(event)">
-                        <div class="scrollbar-thumb" id="projects-scroll-thumb"></div>
+                    <div class="scrollbar-button scroll-up" onclick="scrollContent('about', -20)"></div>
+                    <div class="scrollbar-track" onclick="scrollToPosition('about', event)">
+                        <div class="scrollbar-thumb" id="about-scroll-thumb"></div>
                     </div>
-                    <div class="scrollbar-button scroll-down" onclick="scrollProjectsContent(20)"></div>
+                    <div class="scrollbar-button scroll-down" onclick="scrollContent('about', 20)"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Contact Modal with Windows 98 style -->
-    <div id="email-modal" class="modal hidden">
+    <!-- Portfolio Modal -->
+    <div id="portfolio-modal" class="modal hidden">
+        <div class="window" id="portfolio-window">
+            <div class="title-bar" id="portfolio-title-bar">
+                <div class="window-icon">💼</div>
+                <div class="window-title">Mon Portfolio</div>
+                <div class="window-controls">
+                    <div class="control-button minimize-btn" onclick="minimizeWindow('portfolio')"></div>
+                    <div class="control-button maximize-btn" onclick="toggleFullscreen('portfolio')"></div>
+                    <div class="control-button close-btn" onclick="closeModal('portfolio')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="content-area">
+                    <div class="scrollable-content" id="portfolio-scrollable-content">
+                        <div class="sample-text">
+                            <h3>Mon Portfolio</h3>
+                            <p>Découvrez mes réalisations et projets dans le domaine de l'agilité et du management produit.</p>
+                            <h3>Projets Récents</h3>
+                            <p>• Transformation agile d'une équipe de 20 développeurs</p>
+                            <p>• Mise en place d'un process Scrum sur 3 équipes</p>
+                            <p>• Développement d'outils de suivi de performance</p>
+                            <h3>Outils Développés</h3>
+                            <p>• Générateur de graphiques burn-up</p>
+                            <p>• Tableau de compétences d'équipe</p>
+                            <p>• Jeu de mémoire Scrum pour formations</p>
+                            <h3>Formation et Coaching</h3>
+                            <p>Plus de 50 personnes accompagnées dans leur transition agile.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollbar-vertical">
+                    <div class="scrollbar-button scroll-up" onclick="scrollContent('portfolio', -20)"></div>
+                    <div class="scrollbar-track" onclick="scrollToPosition('portfolio', event)">
+                        <div class="scrollbar-thumb" id="portfolio-scroll-thumb"></div>
+                    </div>
+                    <div class="scrollbar-button scroll-down" onclick="scrollContent('portfolio', 20)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Modal -->
+    <div id="projects-modal" class="modal hidden">
+        <div class="window" id="projects-window">
+            <div class="title-bar" id="projects-title-bar">
+                <div class="window-icon">�</div>
+                <div class="window-title">Mes Projets - My Agile Toolkit</div>
+                <div class="window-controls">
+                    <div class="control-button minimize-btn" onclick="minimizeWindow('projects')"></div>
+                    <div class="control-button maximize-btn" onclick="toggleFullscreen('projects')"></div>
+                    <div class="control-button close-btn" onclick="closeModal('projects')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="content-area">
+                    <div class="scrollable-content" id="projects-scrollable-content">
+                        <div class="sample-text">
+                            <h3>🎯 Outils pour Product Managers</h3>
+                            <p><a href="burnup.html">Générateur de graphique burn-up</a></p>
+                            <p>Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.</p>
+                            
+                            <h3>📋 Outils pour Product Owners</h3>
+                            <p><a href="Competences.html">Mon tableau de compétences</a></p>
+                            <p>Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.</p>
+                            
+                            <h3>🏃‍♂️ Outils pour Scrum Masters</h3>
+                            <p><a href="Memory.html">Que savez-vous de Scrum ?</a></p>
+                            <p>Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.</p>
+                            
+                            <h3>À Venir</h3>
+                            <p>• Calculateur de vélocité d'équipe</p>
+                            <p>• Générateur de user stories</p>
+                            <p>• Planning poker en ligne</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollbar-vertical">
+                    <div class="scrollbar-button scroll-up" onclick="scrollContent('projects', -20)"></div>
+                    <div class="scrollbar-track" onclick="scrollToPosition('projects', event)">
+                        <div class="scrollbar-thumb" id="projects-scroll-thumb"></div>
+                    </div>
+                    <div class="scrollbar-button scroll-down" onclick="scrollContent('projects', 20)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal hidden">
         <div class="window" id="contact-window">
             <div class="title-bar" id="contact-title-bar">
-                <div class="window-icon">📧</div>
+                <div class="window-icon">�</div>
                 <div class="window-title">Contact - Andrei Eleodor Sirbu</div>
                 <div class="window-controls">
-                    <div class="control-button minimize-btn" onclick="minimizeContactWindow()"></div>
-                    <div class="control-button maximize-btn" onclick="toggleContactFullscreen()"></div>
-                    <div class="control-button close-btn" id="close-email-modal"></div>
+                    <div class="control-button minimize-btn" onclick="minimizeWindow('contact')"></div>
+                    <div class="control-button maximize-btn" onclick="toggleFullscreen('contact')"></div>
+                    <div class="control-button close-btn" onclick="closeModal('contact')"></div>
                 </div>
             </div>
             <div class="window-content">
                 <div class="content-area">
                     <div class="scrollable-content" id="contact-scrollable-content">
-                        
-                        <!-- Section 1: À Propos -->
-                        <section class="contact-section">
-                            <h2>👋 À Propos</h2>
-                            <div class="about-profile">
-                                <div class="about-avatar">
-                                    <img src="img/portrait.jpeg" alt="Andrei Eleodor Sirbu" class="profile-image">
-                                </div>
-                                <div class="about-info">
-                                    <h3>Andrei Eleodor Sirbu</h3>
-                                    <p class="about-title">Product Manager & Agile Coach</p>
-                                    <p class="about-description">
-                                        Passionné par l'agilité et la création de produits digitaux innovants. 
-                                        J'accompagne les équipes dans leur transformation agile et aide à construire 
-                                        des solutions qui répondent aux vrais besoins des utilisateurs.
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- Section 2: Coordonnées -->
-                        <section class="contact-section">
-                            <h2>📞 Coordonnées</h2>
-                            <div class="contact-methods">
-                                <div class="contact-method">
-                                    <div class="contact-icon">📧</div>
-                                    <div class="contact-info">
-                                        <h3>Email</h3>
-                                        <a href="mailto:eleodorandrei@gmail.com">eleodorandrei@gmail.com</a>
-                                    </div>
-                                </div>
-                                <div class="contact-method">
-                                    <div class="contact-icon">💼</div>
-                                    <div class="contact-info">
-                                        <h3>LinkedIn</h3>
-                                        <a href="https://linkedin.com/in/andrei-sirbu" target="_blank">Voir mon profil</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- Section 3: Envoyer un Message -->
-                        <section class="contact-section">
-                            <h2>💬 Envoyer un Message</h2>
-                            <form id="email-form" class="contact-form">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="sender-firstname">Prénom</label>
-                                        <input type="text" id="sender-firstname" name="firstname" required placeholder="Votre prénom">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sender-lastname">Nom</label>
-                                        <input type="text" id="sender-lastname" name="lastname" required placeholder="Votre nom">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="sender-email">Adresse email</label>
-                                    <input type="email" id="sender-email" name="email" required placeholder="votre.email@exemple.com">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email-message">Votre message</label>
-                                    <textarea id="email-message" name="message" rows="6" required placeholder="Tapez votre message ici..."></textarea>
-                                </div>
-                                <button type="submit" class="contact-submit-btn">
-                                    📤 Envoyer le message
-                                </button>
+                        <div class="sample-text">
+                            <h3>📞 Me Contacter</h3>
+                            <p><strong>Email:</strong> <a href="mailto:eleodorandrei@gmail.com">eleodorandrei@gmail.com</a></p>
+                            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/andrei-eleodor-sirbu/" target="_blank">linkedin.com/in/andrei-eleodor-sirbu</a></p>
+                            
+                            <h3>💬 Envoyer un Message</h3>
+                            <form id="email-form">
+                                <p><label>Prénom: <input type="text" id="sender-firstname" required></label></p>
+                                <p><label>Nom: <input type="text" id="sender-lastname" required></label></p>
+                                <p><label>Email: <input type="email" id="sender-email" required></label></p>
+                                <p><label>Message:</label></p>
+                                <p><textarea id="email-message" rows="6" required placeholder="Votre message..."></textarea></p>
+                                <p><button type="submit">📤 Envoyer</button></p>
                             </form>
-                        </section>
-
+                        </div>
                     </div>
                 </div>
                 <div class="scrollbar-vertical">
-                    <div class="scrollbar-button scroll-up" onclick="scrollContactContent(-20)"></div>
-                    <div class="scrollbar-track" onclick="scrollContactToPosition(event)">
+                    <div class="scrollbar-button scroll-up" onclick="scrollContent('contact', -20)"></div>
+                    <div class="scrollbar-track" onclick="scrollToPosition('contact', event)">
                         <div class="scrollbar-thumb" id="contact-scroll-thumb"></div>
                     </div>
-                    <div class="scrollbar-button scroll-down" onclick="scrollContactContent(20)"></div>
+                    <div class="scrollbar-button scroll-down" onclick="scrollContent('contact', 20)"></div>
                 </div>
             </div>
         </div>
