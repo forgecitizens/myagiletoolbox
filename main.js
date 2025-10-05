@@ -18,13 +18,20 @@ let activeModals = new Set();
 let dragState = { isDragging: false, element: null, offset: { x: 0, y: 0 } };
 
 function openModal(modalId) {
+    console.log('Opening modal:', modalId);
     const modal = document.getElementById(modalId + '-modal');
-    if (!modal) return;
+    console.log('Modal element found:', modal);
+    if (!modal) {
+        console.error('Modal not found:', modalId + '-modal');
+        return;
+    }
     
     const window = modal.querySelector('.window');
+    console.log('Window element found:', window);
     
     // Remove hidden class instead of setting display property
     modal.classList.remove('hidden');
+    console.log('Hidden class removed, modal should be visible');
     window.style.left = (50 + Math.random() * 100) + 'px';
     window.style.top = (50 + Math.random() * 100) + 'px';
 
@@ -289,38 +296,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add click event listeners for all icons
     if (aboutIcon) {
+        console.log('About icon found, adding click listener');
         aboutIcon.addEventListener('click', function () {
+            console.log('About icon clicked');
             selectIcon(this);
             openModal('about');
         });
+    } else {
+        console.error('About icon not found');
     }
 
     if (portfolioIcon) {
+        console.log('Portfolio icon found, adding click listener');
         portfolioIcon.addEventListener('click', function () {
+            console.log('Portfolio icon clicked');
             selectIcon(this);
             openModal('portfolio');
         });
+    } else {
+        console.error('Portfolio icon not found');
     }
 
     if (trashIcon) {
+        console.log('Trash icon found, adding click listener');
         trashIcon.addEventListener('click', function () {
+            console.log('Trash icon clicked');
             selectIcon(this);
             alert('Corbeille (Pleine) - Fonctionnalité à implémenter !');
         });
+    } else {
+        console.error('Trash icon not found');
     }
 
     if (projectsIcon) {
+        console.log('Projects icon found, adding click listener');
         projectsIcon.addEventListener('click', function () {
+            console.log('Projects icon clicked');
             selectIcon(this);
             openModal('projects');
         });
+    } else {
+        console.error('Projects icon not found');
     }
 
     if (contactIcon) {
+        console.log('Contact icon found, adding click listener');
         contactIcon.addEventListener('click', function () {
+            console.log('Contact icon clicked');
             selectIcon(this);
             openModal('contact');
         });
+    } else {
+        console.error('Contact icon not found');
     }
 
     // Email form functionality
