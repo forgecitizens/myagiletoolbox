@@ -251,6 +251,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let draggedIcon = null;
     let offsetX = 0;
     let offsetY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
 
     document.querySelectorAll('.desktop-icon').forEach(icon => {
         icon.setAttribute('draggable', 'false');
@@ -260,6 +263,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const rect = icon.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            isDragging = false;
             icon.style.zIndex = 1000;
             document.body.style.userSelect = 'none';
         });
@@ -267,22 +273,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.addEventListener('mousemove', function (e) {
         if (draggedIcon) {
-            const desktopRect = desktop.getBoundingClientRect();
-            let x = e.clientX - desktopRect.left - offsetX;
-            let y = e.clientY - desktopRect.top - offsetY;
+            // Check if we've moved enough to consider this a drag
+            const dragDistance = Math.sqrt(
+                Math.pow(e.clientX - dragStartX, 2) + Math.pow(e.clientY - dragStartY, 2)
+            );
+            
+            if (dragDistance > 5) { // 5 pixel threshold
+                isDragging = true;
+                const desktopRect = desktop.getBoundingClientRect();
+                let x = e.clientX - desktopRect.left - offsetX;
+                let y = e.clientY - desktopRect.top - offsetY;
 
-            x = Math.max(0, Math.min(x, desktop.offsetWidth - draggedIcon.offsetWidth));
-            y = Math.max(0, Math.min(y, desktop.offsetHeight - draggedIcon.offsetHeight));
+                x = Math.max(0, Math.min(x, desktop.offsetWidth - draggedIcon.offsetWidth));
+                y = Math.max(0, Math.min(y, desktop.offsetHeight - draggedIcon.offsetHeight));
 
-            draggedIcon.style.left = x + 'px';
-            draggedIcon.style.top = y + 'px';
+                draggedIcon.style.left = x + 'px';
+                draggedIcon.style.top = y + 'px';
+            }
         }
     });
 
-    document.addEventListener('mouseup', function () {
+    document.addEventListener('mouseup', function (e) {
         if (draggedIcon) {
             draggedIcon.style.zIndex = 1;
+            
+            // If we didn't drag (just clicked), trigger the click manually
+            if (!isDragging) {
+                console.log('Triggering click for icon:', draggedIcon.className);
+                draggedIcon.click();
+            }
+            
             draggedIcon = null;
+            isDragging = false;
             document.body.style.userSelect = '';
         }
     });
