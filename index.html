@@ -146,7 +146,7 @@
         .system-tray {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 16px;
             font-size: 10px;
             color: #000;
         }
@@ -173,6 +173,13 @@
             width: 2px;
             height: 4px;
             background: #000;
+        }
+
+        .visitor-counter {
+            min-width: 45px;
+            text-align: center;
+            white-space: nowrap;
+            padding: 0 4px;
         }
 
         .start-menu {
@@ -517,7 +524,7 @@
             </div>
             <div class="visitor-counter" id="visitorCounter" style="display: flex; align-items: center; gap: 4px; cursor: pointer;" title="Nombre de visiteurs uniques">
                 <span style="font-size: 10px;">👥</span>
-                <span id="visitorCount" style="font-size: 10px; color: #000;">...</span>
+                <span id="visitorCount" style="font-size: 10px; color: #000; font-weight: bold;">...</span>
             </div>
             <div id="datetime"></div>
         </div>
