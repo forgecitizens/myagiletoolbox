@@ -23,7 +23,8 @@ function openModal(modalId) {
     
     const window = modal.querySelector('.window');
     
-    modal.style.display = 'block';
+    // Remove hidden class instead of setting display property
+    modal.classList.remove('hidden');
     window.style.left = (50 + Math.random() * 100) + 'px';
     window.style.top = (50 + Math.random() * 100) + 'px';
 
@@ -50,7 +51,7 @@ function initializeWindowControls(modal, modalId) {
     const closeButton = window.querySelector('.close-button');
     if (closeButton) {
         closeButton.addEventListener('click', function() {
-            modal.style.display = 'none';
+            modal.classList.add('hidden');
             activeModals.delete(modalId);
             removeTaskbarEntry(modalTitles[modalId]);
         });
@@ -350,7 +351,7 @@ ${message}`;
             // Close the contact modal
             const contactModal = document.getElementById('contact-modal');
             if (contactModal) {
-                contactModal.style.display = 'none';
+                contactModal.classList.add('hidden');
                 activeModals.delete('contact');
                 removeTaskbarEntry('Contact');
             }
