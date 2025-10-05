@@ -4,306 +4,1715 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Agile Toolkit - Page d'Accueil</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            background: linear-gradient(45deg, #008080 0%, #004040 100%);
+            height: 100vh;
+            overflow: hidden;
+            cursor: default;
+            user-select: none;
+        }
+
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 28px);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 2px;
+            transition: background-color 0.1s;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(0, 0, 139, 0.3);
+            border: 1px dotted #ffffff;
+        }
+
+        .desktop-icon.selected {
+            background-color: rgba(0, 0, 139, 0.5);
+            border: 1px dotted #ffffff;
+        }
+
+        .icon-image {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 4px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .icon-label {
+            color: white;
+            text-align: center;
+            font-size: 10px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+            line-height: 12px;
+            max-width: 70px;
+            word-wrap: break-word;
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            border-top: 1px solid #dfdfdf;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4px;
+            z-index: 1000;
+        }
+
+        .start-button {
+            height: 22px;
+            padding: 0 8px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            border: 1px outset #c0c0c0;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .start-button:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .start-button.active {
+            border: 1px inset #c0c0c0;
+            background: linear-gradient(to bottom, #a0a0a0 0%, #c0c0c0 100%);
+        }
+
+        .taskbar-windows {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex: 1;
+            margin-left: 8px;
+            overflow: hidden;
+        }
+
+        .taskbar-window {
+            height: 22px;
+            padding: 0 8px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            border: 1px outset #c0c0c0;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            min-width: 80px;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .taskbar-window:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .taskbar-window.active {
+            border: 1px inset #c0c0c0;
+            background: linear-gradient(to bottom, #a0a0a0 0%, #c0c0c0 100%);
+        }
+
+        .system-tray {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            color: #000;
+        }
+
+        .battery {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .battery-icon {
+            width: 16px;
+            height: 8px;
+            border: 1px solid #000;
+            position: relative;
+            background: #00ff00;
+        }
+
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: 2px;
+            width: 2px;
+            height: 4px;
+            background: #000;
+        }
+
+        .start-menu {
+            position: absolute;
+            bottom: 28px;
+            left: 4px;
+            width: 200px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            display: none;
+            z-index: 1001;
+        }
+
+        .start-menu.show {
+            display: block;
+        }
+
+        .start-menu-item {
+            padding: 4px 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #a0a0a0;
+            font-size: 11px;
+        }
+
+        .start-menu-item:hover {
+            background: #0000ff;
+            color: white;
+        }
+
+        .modal {
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            min-width: 300px;
+            min-height: 200px;
+            display: none;
+            z-index: 100;
+            resize: both;
+            overflow: hidden;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, #0000ff 0%, #8080ff 100%);
+            color: white;
+            padding: 2px 4px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            height: 18px;
+        }
+
+        .modal-title {
+            flex: 1;
+            padding-left: 4px;
+        }
+
+        .modal-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .modal-button {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            font-size: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .modal-button:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .modal-content {
+            height: calc(100% - 22px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 8px;
+            background: white;
+            border: 1px inset #c0c0c0;
+            margin: 2px;
+        }
+
+        .resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, transparent 0%, transparent 40%, #808080 40%, #808080 45%, transparent 45%, transparent 50%, #808080 50%, #808080 55%, transparent 55%);
+            cursor: se-resize;
+        }
+
+        /* Context menu styling */
+        .context-menu {
+            position: absolute;
+            background: #000000;
+            border: 1px solid #808080;
+            min-width: 120px;
+            display: none;
+            z-index: 1002;
+            font-size: 11px;
+        }
+
+        .context-menu.show {
+            display: block;
+        }
+
+        .context-menu-item {
+            padding: 4px 8px;
+            color: #c0c0c0;
+            cursor: pointer;
+            border-bottom: 1px solid #404040;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .context-menu-item:hover {
+            background: #0000ff;
+            color: white;
+        }
+
+        /* Info popup styling */
+        .info-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            width: 400px;
+            min-height: 200px;
+            display: none;
+            z-index: 1003;
+        }
+
+        .info-popup.show {
+            display: block;
+        }
+
+        .info-popup-header {
+            background: linear-gradient(to right, #0000ff 0%, #8080ff 100%);
+            color: white;
+            padding: 2px 4px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 18px;
+        }
+
+        .info-popup-content {
+            padding: 12px;
+            background: white;
+            border: 1px inset #c0c0c0;
+            margin: 2px;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        /* Calendar styling */
+        .calendar-popup {
+            position: absolute;
+            bottom: 30px;
+            right: 4px;
+            width: 220px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            display: none;
+            z-index: 1004;
+            font-size: 11px;
+        }
+
+        .calendar-popup.show {
+            display: block;
+        }
+
+        .calendar-header {
+            background: linear-gradient(to right, #0000ff 0%, #8080ff 100%);
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-nav {
+            cursor: pointer;
+            padding: 2px 6px;
+            border: 1px outset #c0c0c0;
+            background: #c0c0c0;
+            color: black;
+            font-size: 10px;
+        }
+
+        .calendar-nav:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            padding: 4px;
+            background: white;
+        }
+
+        .calendar-day-header {
+            background: #c0c0c0;
+            padding: 2px;
+            text-align: center;
+            font-size: 9px;
+            font-weight: bold;
+            border: 1px solid #808080;
+        }
+
+        .calendar-day {
+            padding: 4px 2px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+            min-height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .calendar-day:hover {
+            background: #e0e0e0;
+            border: 1px solid #808080;
+        }
+
+        .calendar-day.other-month {
+            color: #808080;
+        }
+
+        .calendar-day.today {
+            background: #ffff00;
+            font-weight: bold;
+            border: 1px solid #000;
+        }
+
+        .calendar-day.highlighted {
+            background: #ff8080;
+            font-weight: bold;
+            border: 1px solid #ff0000;
+        }
+
+        .calendar-day.highlighted:hover {
+            background: #ff6060;
+        }
+
+        /* Scrollbar styling */
+        .modal-content::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #c0c0c0;
+            border: 1px inset #c0c0c0;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+        }
+
+        .modal-content::-webkit-scrollbar-button {
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            height: 16px;
+        }
+    </style>
 </head>
 <body>
-    <div class="desktop">
-        <!-- Icônes du bureau -->
-        <div class="desktop-icon icon-about">
-            <svg viewBox="0 0 32 32">
-                <rect x="4" y="4" width="24" height="24" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
-                <rect x="6" y="6" width="20" height="20" fill="#ffffff"/>
-                <circle cx="16" cy="12" r="3" fill="#000080"/>
-                <rect x="13" y="18" width="6" height="8" fill="#000080"/>
-            </svg>
-            <span>À Propos</span>
+    <div class="desktop" id="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" style="top: 20px; left: 20px;" data-modal="pm-tools">
+            <div class="icon-image">🛠️</div>
+            <div class="icon-label">Outils pour Product Managers</div>
         </div>
 
-        <div class="desktop-icon icon-portfolio">
-            <svg viewBox="0 0 32 32">
-                <rect x="4" y="8" width="24" height="16" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
-                <rect x="6" y="10" width="20" height="12" fill="#ffffff"/>
-                <rect x="8" y="12" width="16" height="2" fill="#000080"/>
-                <rect x="8" y="16" width="12" height="2" fill="#000080"/>
-                <rect x="8" y="20" width="8" height="2" fill="#000080"/>
-            </svg>
-            <span>Mon Portfolio</span>
+        <div class="desktop-icon" style="top: 120px; left: 20px;" data-modal="po-tools">
+            <div class="icon-image">📋</div>
+            <div class="icon-label">Outils pour Product Owners</div>
         </div>
 
-        <div class="desktop-icon icon-projects" id="icon-projects">
-            <svg viewBox="0 0 32 32">
-                <rect x="6" y="6" width="20" height="20" fill="#ffff00" stroke="#808080" stroke-width="1"/>
-                <rect x="8" y="8" width="16" height="16" fill="#ffffff"/>
-                <rect x="10" y="10" width="12" height="2" fill="#000080"/>
-                <rect x="10" y="14" width="8" height="2" fill="#000080"/>
-                <rect x="10" y="18" width="10" height="2" fill="#000080"/>
-            </svg>
-            <span>Mes Projets</span>
+        <div class="desktop-icon" style="top: 220px; left: 20px;" data-modal="sm-tools">
+            <div class="icon-image">🏃</div>
+            <div class="icon-label">Outils pour Scrum Masters</div>
         </div>
 
-        <div class="desktop-icon icon-contact">
-            <svg viewBox="0 0 32 32">
-                <rect x="4" y="8" width="24" height="16" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
-                <polygon points="4,8 16,16 28,8" fill="#ffffff" stroke="#808080"/>
-                <line x1="4" y1="24" x2="12" y2="16" stroke="#808080" stroke-width="1"/>
-                <line x1="28" y1="24" x2="20" y2="16" stroke="#808080" stroke-width="1"/>
-            </svg>
-            <span>Contact</span>
+        <div class="desktop-icon" style="top: 320px; left: 20px;" data-modal="formations">
+            <div class="icon-image">🎓</div>
+            <div class="icon-label">Formations Jira / Confluence</div>
         </div>
 
-        <div class="desktop-icon icon-trash">
-            <svg viewBox="0 0 32 32">
-                <rect x="8" y="10" width="16" height="18" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
-                <rect x="6" y="8" width="20" height="4" fill="#808080"/>
-                <rect x="12" y="4" width="8" height="4" fill="#808080"/>
-                <rect x="10" y="14" width="2" height="10" fill="#ff0000"/>
-                <rect x="15" y="14" width="2" height="10" fill="#ff0000"/>
-                <rect x="20" y="14" width="2" height="10" fill="#ff0000"/>
-            </svg>
-            <span>Corbeille (Pleine)</span>
+        <div class="desktop-icon" style="top: 420px; left: 20px;" data-modal="contact">
+            <div class="icon-image">📞</div>
+            <div class="icon-label">Contact</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 520px; left: 20px;" data-modal="trash">
+            <div class="icon-image">🗑️</div>
+            <div class="icon-label">Corbeille</div>
         </div>
     </div>
 
-    <!-- Barre des tâches -->
+    <!-- Taskbar -->
     <div class="taskbar">
-        <div class="start-button" id="start-button">
-            <img src="img/portrait.jpeg" alt="Portrait" style="width:8px; height:8px; margin-right:4px; object-fit:cover; border-radius:2px;">
+        <button class="start-button" id="startButton">
+            <span style="background: linear-gradient(45deg, red, yellow, green, blue); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold;">⊞</span>
             Démarrer
-        </div>
+        </button>
 
-        <div class="taskbar-center">
-            <div class="window-button">
-                <span>Navigateur - Accueil</span>
-            </div>
+        <div class="taskbar-windows" id="taskbarWindows">
+            <!-- Minimized windows will appear here -->
         </div>
 
         <div class="system-tray">
-            <svg width="16" height="16" viewBox="0 0 16 16">
-                <rect x="2" y="6" width="12" height="8" fill="#c0c0c0" stroke="#808080"/>
-                <rect x="4" y="8" width="8" height="4" fill="#000080"/>
-            </svg>
-            <svg width="16" height="16" viewBox="0 0 16 16" style="margin-left: 4px;">
-                <circle cx="8" cy="8" r="6" fill="#c0c0c0" stroke="#808080"/>
-                <rect x="7" y="4" width="2" height="4" fill="#000000"/>
-                <rect x="7" y="8" width="4" height="2" fill="#000000"/>
-            </svg>
-            <span class="time" id="current-time">14:35</span>
+            <div class="battery">
+                <div class="battery-icon"></div>
+                <span id="batteryLevel">85%</span>
+            </div>
+            <div id="datetime"></div>
         </div>
     </div>
 
-    <!-- Menu Démarrer -->
-    <div class="start-menu hidden" id="start-menu">
-        <div class="start-menu-header">My Agile Toolkit</div>
-        <div class="start-menu-separator"></div>
-        
-        <div class="start-menu-item" onclick="navigateToPage(1)">
-            Andrei Eleodor Sirbu
+    <!-- Calendar Popup -->
+    <div class="calendar-popup" id="calendarPopup">
+        <div class="calendar-header">
+            <div class="calendar-nav" onclick="changeMonth(-1)">◀</div>
+            <div id="calendarTitle">Janvier 2024</div>
+            <div class="calendar-nav" onclick="changeMonth(1)">▶</div>
         </div>
-        <div class="start-menu-item" onclick="navigateToPage(2)">
-            Photographie
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(3)">
-            Jeux-vidéos
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(4)">
-            Musique
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(5)">
-            Ecriture
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(6)">
-            Voyages
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(7)">
-            Paramètres
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(8)">
-            Essais
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(9)">
-            Illustrations
-        </div>
-        <div class="start-menu-item" onclick="navigateToPage(10)">
-            Dernières nouvelles
-        </div>
-        <div class="start-menu-separator"></div>
-        <div class="start-menu-item" onclick="shutdown()">
-            Arrêter...
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendar will be generated here -->
         </div>
     </div>
 
-    <!-- About Modal -->
-    <div id="about-modal" class="modal hidden">
-        <div class="window" id="about-window">
-            <div class="title-bar" id="about-title-bar">
-                <div class="window-icon">�</div>
-                <div class="window-title">À Propos - Andrei Eleodor Sirbu</div>
-                <div class="window-controls">
-                    <div class="control-button minimize-button"></div>
-                    <div class="control-button maximize-button"></div>
-                    <div class="control-button close-button"></div>
+    <!-- Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-item" data-modal="programs">Programmes</div>
+        <div class="start-menu-item" data-modal="documents">Documents</div>
+        <div class="start-menu-item" data-modal="settings">Paramètres</div>
+        <div class="start-menu-item" data-modal="search">Rechercher</div>
+        <div class="start-menu-item" data-modal="help">Aide</div>
+        <div class="start-menu-item" data-modal="run">Exécuter</div>
+        <div class="start-menu-item" data-modal="logoff">Fermer la session</div>
+        <div class="start-menu-item" data-modal="shutdown">Arrêter</div>
+        <div class="start-menu-item" data-modal="calculator">Calculatrice</div>
+        <div class="start-menu-item" data-modal="notepad">Bloc-notes</div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="pm-tools-modal">
+        <div class="modal-header">
+            <div class="modal-title">Outils pour Product Managers</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('pm-tools-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('pm-tools-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('pm-tools-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <h3>🎯 Outils pour Product Managers</h3>
+            <p><a href="burnup.html" target="_blank" style="color: #0000ff; text-decoration: underline;">Générateur de graphique burn-up</a></p>
+            <p>Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="po-tools-modal">
+        <div class="modal-header">
+            <div class="modal-title">Outils pour Product Owners</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('po-tools-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('po-tools-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('po-tools-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <h3>📋 Outils pour Product Owners</h3>
+            <p><a href="Competences.html" target="_blank" style="color: #0000ff; text-decoration: underline;">Mon tableau de compétences</a></p>
+            <p>Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="sm-tools-modal">
+        <div class="modal-header">
+            <div class="modal-title">Outils pour Scrum Masters</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('sm-tools-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('sm-tools-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('sm-tools-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <h3>🏃‍♂️ Outils pour Scrum Masters</h3>
+            <p><a href="Memory.html" target="_blank" style="color: #0000ff; text-decoration: underline;">Que savez-vous de Scrum ?</a></p>
+            <p>Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="formations-modal">
+        <div class="modal-header">
+            <div class="modal-title">Formations Jira / Confluence</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('formations-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('formations-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('formations-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="contact-modal">
+        <div class="modal-header">
+            <div class="modal-title">Contact</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('contact-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('contact-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('contact-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <!-- Mes coordonnées -->
+            <div style="background: #f0f0f0; border: 1px inset #c0c0c0; padding: 16px; margin-bottom: 16px;">
+                <h3 style="margin: 0 0 12px 0; color: #000080; font-size: 14px;">Mes coordonnées</h3>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: bold; margin-right: 8px;">👤</span>
+                    <span style="font-size: 12px;">Andrei Eleodor Sirbu</span>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: bold; margin-right: 8px;">📧</span>
+                    <a href="mailto:eleodorandrei@gmail.com" style="color: #0000ff; text-decoration: underline; font-size: 12px;">eleodorandrei@gmail.com</a>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="font-weight: bold; margin-right: 8px;">💼</span>
+                    <a href="https://www.linkedin.com/in/andrei-eleodor-sirbu/" target="_blank" rel="noopener noreferrer" style="color: #0000ff; text-decoration: underline; font-size: 12px;">LinkedIn Profile</a>
                 </div>
             </div>
-            <div class="window-content">
-                <div class="content-area">
-                    <div class="scrollable-content" id="about-scrollable-content">
-                        <div class="sample-text">
-                            <h3>À Propos de Moi</h3>
-                            <p>Je suis Andrei Eleodor Sirbu, passionné par l'agilité et l'innovation digitale.</p>
-                            <p>Product Manager et Agile Coach, j'accompagne les équipes dans leur transformation vers plus d'efficacité et de collaboration.</p>
-                            <h3>Mon Expertise</h3>
-                            <p>• Product Management</p>
-                            <p>• Scrum Master Certifié</p>
-                            <p>• Agile Coaching</p>
-                            <p>• Lean Startup</p>
-                            <p>• Design Thinking</p>
-                            <h3>Ma Mission</h3>
-                            <p>Aider les organisations à créer des produits qui répondent vraiment aux besoins des utilisateurs, tout en optimisant les processus de développement.</p>
+
+            <!-- Formulaire de contact -->
+            <div style="background: #f0f0f0; border: 1px inset #c0c0c0; padding: 16px;">
+                <h3 style="margin: 0 0 16px 0; color: #000080; font-size: 14px;">Envoyez-moi un message</h3>
+                <form id="contactForm" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; gap: 12px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 11px; font-weight: bold;">Prénom :</label>
+                            <input type="text" id="firstName" required style="width: 100%; padding: 4px; border: 1px inset #c0c0c0; font-size: 11px; font-family: 'MS Sans Serif', sans-serif;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 11px; font-weight: bold;">Nom :</label>
+                            <input type="text" id="lastName" required style="width: 100%; padding: 4px; border: 1px inset #c0c0c0; font-size: 11px; font-family: 'MS Sans Serif', sans-serif;">
                         </div>
                     </div>
-                </div>
-                <div class="scrollbar-vertical">
-                    <div class="scrollbar-button scroll-up"></div>
-                    <div class="scrollbar-track">
-                        <div class="scroll-thumb" id="about-scroll-thumb"></div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; font-size: 11px; font-weight: bold;">Adresse email :</label>
+                        <input type="email" id="email" required style="width: 100%; padding: 4px; border: 1px inset #c0c0c0; font-size: 11px; font-family: 'MS Sans Serif', sans-serif;">
                     </div>
-                    <div class="scrollbar-button scroll-down"></div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; font-size: 11px; font-weight: bold;">Message :</label>
+                        <textarea id="message" required rows="6" style="width: 100%; padding: 4px; border: 1px inset #c0c0c0; font-size: 11px; font-family: 'MS Sans Serif', sans-serif; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+                        <button type="submit" style="padding: 6px 16px; background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%); border: 1px outset #c0c0c0; font-size: 11px; font-family: 'MS Sans Serif', sans-serif; cursor: pointer;">
+                            📧 Envoyer
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Message de confirmation -->
+                <div id="contactMessage" style="display: none; margin-top: 12px; padding: 8px; background: #90ee90; border: 1px solid #008000; font-size: 11px;">
+                    ✅ Votre message a été envoyé avec succès !
                 </div>
             </div>
         </div>
+        <div class="resize-handle"></div>
     </div>
 
-    <!-- Portfolio Modal -->
-    <div id="portfolio-modal" class="modal hidden">
-        <div class="window" id="portfolio-window">
-            <div class="title-bar" id="portfolio-title-bar">
-                <div class="window-icon">💼</div>
-                <div class="window-title">Mon Portfolio</div>
-                <div class="window-controls">
-                    <div class="control-button minimize-button"></div>
-                    <div class="control-button maximize-button"></div>
-                    <div class="control-button close-button"></div>
-                </div>
+    <div class="modal" id="trash-modal">
+        <div class="modal-header">
+            <div class="modal-title">Corbeille - Mini-jeu</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="maximizeModal('trash-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('trash-modal')">×</div>
             </div>
-            <div class="window-content">
-                <div class="content-area">
-                    <div class="scrollable-content" id="portfolio-scrollable-content">
-                        <div class="sample-text">
-                            <h3>Mon Portfolio</h3>
-                            <p>Découvrez mes réalisations et projets dans le domaine de l'agilité et du management produit.</p>
-                            <h3>Projets Récents</h3>
-                            <p>• Transformation agile d'une équipe de 20 développeurs</p>
-                            <p>• Mise en place d'un process Scrum sur 3 équipes</p>
-                            <p>• Développement d'outils de suivi de performance</p>
-                            <h3>Outils Développés</h3>
-                            <p>• Générateur de graphiques burn-up</p>
-                            <p>• Tableau de compétences d'équipe</p>
-                            <p>• Jeu de mémoire Scrum pour formations</p>
-                            <h3>Formation et Coaching</h3>
-                            <p>Plus de 50 personnes accompagnées dans leur transition agile.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="scrollbar-vertical">
-                    <div class="scrollbar-button scroll-up"></div>
-                    <div class="scrollbar-track">
-                        <div class="scroll-thumb" id="portfolio-scroll-thumb"></div>
-                    </div>
-                    <div class="scrollbar-button scroll-down"></div>
-                </div>
+        </div>
+        <div class="modal-content" style="padding: 0; position: relative; overflow: hidden;">
+            <!-- Game UI -->
+            <div style="position: absolute; top: 8px; right: 8px; z-index: 10; background: rgba(192, 192, 192, 0.9); padding: 8px; border: 1px outset #c0c0c0; font-size: 12px; font-weight: bold;">
+                Score: <span id="gameScore">0</span>/<span id="totalPapers">0</span>
             </div>
+            
+            <div style="position: absolute; top: 8px; left: 8px; z-index: 10;">
+                <button onclick="startNewGame()" style="padding: 4px 8px; background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%); border: 1px outset #c0c0c0; font-size: 11px; cursor: pointer;">
+                    🎮 Nouvelle partie
+                </button>
+            </div>
+            
+            <!-- Game Area -->
+            <div id="gameArea" style="width: 100%; height: 100%; position: relative; background: linear-gradient(to bottom, #e0e0ff 0%, #c0c0e0 100%); min-height: 400px;">
+                <!-- Desk -->
+                <div id="desk" style="position: absolute; bottom: 20px; left: 50px; width: 300px; height: 80px; background: #8B4513; border: 3px solid #654321; border-radius: 8px; z-index: 2;">
+                    <!-- Desk legs -->
+                    <div style="position: absolute; bottom: -60px; left: 20px; width: 15px; height: 60px; background: #654321; border-radius: 4px;"></div>
+                    <div style="position: absolute; bottom: -60px; right: 20px; width: 15px; height: 60px; background: #654321; border-radius: 4px;"></div>
+                    <!-- Computer monitor -->
+                    <div style="position: absolute; top: -40px; left: 50px; width: 80px; height: 50px; background: #2c3e50; border: 2px solid #1a252f; border-radius: 4px;">
+                        <div style="position: absolute; top: 5px; left: 5px; right: 5px; bottom: 15px; background: #34495e; border-radius: 2px;"></div>
+                        <!-- Monitor stand -->
+                        <div style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 30px; height: 10px; background: #2c3e50; border-radius: 4px;"></div>
+                    </div>
+                    <!-- Keyboard -->
+                    <div style="position: absolute; top: 15px; left: 40px; width: 60px; height: 20px; background: #ecf0f1; border: 1px solid #bdc3c7; border-radius: 3px;"></div>
+                    <!-- Papers on desk -->
+                    <div style="position: absolute; top: 10px; left: 150px; width: 40px; height: 30px; background: #fff; border: 1px solid #ccc; transform: rotate(15deg);"></div>
+                    <div style="position: absolute; top: 20px; left: 180px; width: 35px; height: 25px; background: #fff; border: 1px solid #ccc; transform: rotate(-10deg);"></div>
+                </div>
+                
+                <!-- Boss Character (sitting) -->
+                <div id="bossCharacter" style="position: absolute; bottom: 80px; left: 120px; width: 160px; height: 200px; z-index: 4;">
+                    <!-- Chair -->
+                    <div style="position: absolute; bottom: -20px; left: 20px; width: 120px; height: 60px; background: #2c3e50; border-radius: 8px; border: 2px solid #1a252f;">
+                        <!-- Chair back -->
+                        <div style="position: absolute; top: -80px; left: 10px; right: 10px; height: 80px; background: #2c3e50; border: 2px solid #1a252f; border-radius: 8px 8px 0 0;"></div>
+                        <!-- Chair legs -->
+                        <div style="position: absolute; bottom: -30px; left: 10px; width: 8px; height: 30px; background: #1a252f; border-radius: 4px;"></div>
+                        <div style="position: absolute; bottom: -30px; right: 10px; width: 8px; height: 30px; background: #1a252f; border-radius: 4px;"></div>
+                    </div>
+                    
+                    <!-- Boss Body (sitting position) -->
+                    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 100px; height: 120px; background: #2c3e50; border-radius: 8px; border: 3px solid #1a252f;"></div>
+                    
+                    <!-- Boss Head -->
+                    <div style="position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; background: #f4c2a1; border-radius: 50%; border: 3px solid #d4a574;">
+                        <!-- Angry Eyebrows -->
+                        <div style="position: absolute; top: 12px; left: 12px; width: 16px; height: 3px; background: #8b4513; transform: rotate(-20deg);"></div>
+                        <div style="position: absolute; top: 12px; right: 12px; width: 16px; height: 3px; background: #8b4513; transform: rotate(20deg);"></div>
+                        <!-- Eyes (angry/narrowed) -->
+                        <div style="position: absolute; top: 20px; left: 16px; width: 10px; height: 6px; background: #000; border-radius: 50%;"></div>
+                        <div style="position: absolute; top: 20px; right: 16px; width: 10px; height: 6px; background: #000; border-radius: 50%;"></div>
+                        <!-- Nose -->
+                        <div style="position: absolute; top: 32px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: #d4a574; border-radius: 50%;"></div>
+                        <!-- Frown -->
+                        <div style="position: absolute; top: 48px; left: 50%; transform: translateX(-50%); width: 20px; height: 6px; background: #000; border-radius: 16px 16px 0 0;"></div>
+                        <!-- Hair -->
+                        <div style="position: absolute; top: -8px; left: 8px; right: 8px; height: 24px; background: #8b4513; border-radius: 40px 40px 0 0;"></div>
+                    </div>
+                    
+                    <!-- Arms (on desk) -->
+                    <div style="position: absolute; bottom: 80px; left: 10px; width: 30px; height: 60px; background: #f4c2a1; border-radius: 15px; border: 2px solid #d4a574; transform: rotate(-20deg);"></div>
+                    <div style="position: absolute; bottom: 80px; right: 10px; width: 30px; height: 60px; background: #f4c2a1; border-radius: 15px; border: 2px solid #d4a574; transform: rotate(20deg);"></div>
+                    
+                    <!-- Hands (on desk) -->
+                    <div style="position: absolute; bottom: 50px; left: 15px; width: 20px; height: 20px; background: #f4c2a1; border-radius: 50%; border: 2px solid #d4a574;"></div>
+                    <div style="position: absolute; bottom: 50px; right: 15px; width: 20px; height: 20px; background: #f4c2a1; border-radius: 50%; border: 2px solid #d4a574;"></div>
+                    
+                    <!-- Legs (sitting) -->
+                    <div style="position: absolute; bottom: -10px; left: 25px; width: 25px; height: 80px; background: #34495e; border-radius: 12px;"></div>
+                    <div style="position: absolute; bottom: -10px; right: 25px; width: 25px; height: 80px; background: #34495e; border-radius: 12px;"></div>
+                    
+                    <!-- Shoes -->
+                    <div style="position: absolute; bottom: -15px; left: 20px; width: 35px; height: 15px; background: #000; border-radius: 8px;"></div>
+                    <div style="position: absolute; bottom: -15px; right: 20px; width: 35px; height: 15px; background: #000; border-radius: 8px;"></div>
+                    
+                    <!-- Tie -->
+                    <div style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 16px; height: 50px; background: #e74c3c; clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);"></div>
+                    
+                    <!-- Shirt collar -->
+                    <div style="position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); width: 50px; height: 16px; background: #fff; border: 2px solid #ccc; border-radius: 25px 25px 0 0;"></div>
+                </div>
+                
+                <!-- Speech Bubble (hidden by default) -->
+                <div id="speechBubble" style="position: absolute; display: none; z-index: 10; background: white; border: 3px solid #000; border-radius: 20px; padding: 10px 15px; font-size: 16px; font-weight: bold; color: #000;">
+                    <div id="speechText">Aïe !</div>
+                    <!-- Bubble tail -->
+                    <div style="position: absolute; bottom: -15px; left: 30px; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 15px solid white;"></div>
+                    <div style="position: absolute; bottom: -12px; left: 33px; width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 12px solid #000;"></div>
+                </div>
+                
+                <!-- Trash Can -->
+                <div id="trashCan" style="position: absolute; bottom: 20px; left: 380px; width: 80px; height: 100px; background: #404040; border: 2px solid #202020; border-radius: 8px 8px 4px 4px; z-index: 5;">
+                    <div style="position: absolute; top: -8px; left: -4px; right: -4px; height: 8px; background: #404040; border: 2px solid #202020; border-radius: 4px;"></div>
+                    <div style="position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; background: #202020; border-radius: 4px;"></div>
+                </div>
+                
+                <!-- Papers will be generated here -->
+            </div>
+            
+            <!-- Game Over Message -->
+            <div id="gameOverMessage" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #c0c0c0; border: 2px outset #c0c0c0; padding: 20px; text-align: center; z-index: 20;">
+                <h3 style="margin: 0 0 10px 0; color: #000080;">🎉 Félicitations !</h3>
+                <p style="margin: 0 0 15px 0;">Félicitations, vous êtes un adepte de la philosophie du clean desk !</p>
+                <button onclick="startNewGame()" style="padding: 6px 12px; background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%); border: 1px outset #c0c0c0; font-size: 11px; cursor: pointer;">
+                    🎮 Rejouer
+                </button>
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- Start Menu Modals -->
+    <div class="modal" id="programs-modal">
+        <div class="modal-header">
+            <div class="modal-title">Programmes</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('programs-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('programs-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('programs-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="documents-modal">
+        <div class="modal-header">
+            <div class="modal-title">Documents</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('documents-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('documents-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('documents-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="settings-modal">
+        <div class="modal-header">
+            <div class="modal-title">Paramètres</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('settings-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('settings-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('settings-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="search-modal">
+        <div class="modal-header">
+            <div class="modal-title">Rechercher</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('search-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('search-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('search-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="help-modal">
+        <div class="modal-header">
+            <div class="modal-title">Aide</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('help-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('help-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('help-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="run-modal">
+        <div class="modal-header">
+            <div class="modal-title">Exécuter</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('run-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('run-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('run-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="logoff-modal">
+        <div class="modal-header">
+            <div class="modal-title">Fermer la session</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('logoff-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('logoff-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('logoff-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="shutdown-modal">
+        <div class="modal-header">
+            <div class="modal-title">Arrêter</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('shutdown-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('shutdown-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('shutdown-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="calculator-modal">
+        <div class="modal-header">
+            <div class="modal-title">Calculatrice</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('calculator-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('calculator-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('calculator-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <div class="modal" id="notepad-modal">
+        <div class="modal-header">
+            <div class="modal-title">Bloc-notes</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('notepad-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('notepad-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('notepad-modal')">×</div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p>Contenu à venir...</p>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="openFromContext()">Ouvrir</div>
+        <div class="context-menu-item" onclick="showInfo()">En savoir plus</div>
+    </div>
+
+    <!-- Info Popup -->
+    <div class="info-popup" id="infoPopup">
+        <div class="info-popup-header">
+            <div>Informations</div>
+            <div class="modal-button" onclick="closeInfo()">×</div>
+        </div>
+        <div class="info-popup-content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
         </div>
     </div>
 
-    <!-- Projects Modal -->
-    <div id="projects-modal" class="modal hidden">
-        <div class="window" id="projects-window">
-            <div class="title-bar" id="projects-title-bar">
-                <div class="window-icon">�</div>
-                <div class="window-title">Mes Projets - My Agile Toolkit</div>
-                <div class="window-controls">
-                    <div class="control-button minimize-button"></div>
-                    <div class="control-button maximize-button"></div>
-                    <div class="control-button close-button"></div>
-                </div>
-            </div>
-            <div class="window-content">
-                <div class="content-area">
-                    <div class="scrollable-content" id="projects-scrollable-content">
-                        <div class="sample-text">
-                            <h3>🎯 Outils pour Product Managers</h3>
-                            <p><a href="burnup.html">Générateur de graphique burn-up</a></p>
-                            <p>Outil pour générer des graphiques burn-up pour une ou plusieurs équipes. Possibilité d'exporter/importer les résultats.</p>
-                            
-                            <h3>📋 Outils pour Product Owners</h3>
-                            <p><a href="Competences.html">Mon tableau de compétences</a></p>
-                            <p>Un générateur de tableau de suivi des compétences d'une équipe. Possibilité d'exporter/importer les résultats.</p>
-                            
-                            <h3>🏃‍♂️ Outils pour Scrum Masters</h3>
-                            <p><a href="Memory.html">Que savez-vous de Scrum ?</a></p>
-                            <p>Un jeu de mémoire sur la thématique Scrum. Peut servir d'ice breaker.</p>
-                            
-                            <h3>À Venir</h3>
-                            <p>• Calculateur de vélocité d'équipe</p>
-                            <p>• Générateur de user stories</p>
-                            <p>• Planning poker en ligne</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="scrollbar-vertical">
-                    <div class="scrollbar-button scroll-up"></div>
-                    <div class="scrollbar-track">
-                        <div class="scroll-thumb" id="projects-scroll-thumb"></div>
-                    </div>
-                    <div class="scrollbar-button scroll-down"></div>
-                </div>
+    <!-- Event Modal -->
+    <div class="modal" id="event-modal">
+        <div class="modal-header">
+            <div class="modal-title" id="eventModalTitle">Événement du 1er</div>
+            <div class="modal-controls">
+                <div class="modal-button" onclick="minimizeModal('event-modal')">_</div>
+                <div class="modal-button" onclick="maximizeModal('event-modal')">□</div>
+                <div class="modal-button" onclick="closeModal('event-modal')">×</div>
             </div>
         </div>
-    </div>
-
-    <!-- Contact Modal -->
-    <div id="contact-modal" class="modal hidden">
-        <div class="window" id="contact-window">
-            <div class="title-bar" id="contact-title-bar">
-                <div class="window-icon">�</div>
-                <div class="window-title">Contact - Andrei Eleodor Sirbu</div>
-                <div class="window-controls">
-                    <div class="control-button minimize-button"></div>
-                    <div class="control-button maximize-button"></div>
-                    <div class="control-button close-button"></div>
-                </div>
-            </div>
-            <div class="window-content">
-                <div class="content-area">
-                    <div class="scrollable-content" id="contact-scrollable-content">
-                        <div class="sample-text">
-                            <h3>📞 Me Contacter</h3>
-                            <p><strong>Email:</strong> <a href="mailto:eleodorandrei@gmail.com">eleodorandrei@gmail.com</a></p>
-                            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/andrei-eleodor-sirbu/" target="_blank">linkedin.com/in/andrei-eleodor-sirbu</a></p>
-                            
-                            <h3>💬 Envoyer un Message</h3>
-                            <form id="email-form">
-                                <p><label>Prénom: <input type="text" id="sender-firstname" required></label></p>
-                                <p><label>Nom: <input type="text" id="sender-lastname" required></label></p>
-                                <p><label>Email: <input type="email" id="sender-email" required></label></p>
-                                <p><label>Message:</label></p>
-                                <p><textarea id="email-message" rows="6" required placeholder="Votre message..."></textarea></p>
-                                <p><button type="submit">📤 Envoyer</button></p>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="scrollbar-vertical">
-                    <div class="scrollbar-button scroll-up"></div>
-                    <div class="scrollbar-track">
-                        <div class="scroll-thumb" id="contact-scroll-thumb"></div>
-                    </div>
-                    <div class="scrollbar-button scroll-down"></div>
-                </div>
-            </div>
+        <div class="modal-content" id="eventModalContent">
+            <h3>Événement spécial</h3>
+            <p>Ceci est un événement prévu pour le premier jour du mois.</p>
+            <p>Vous pourrez personnaliser ce contenu pour afficher des informations spécifiques à chaque date.</p>
         </div>
+        <div class="resize-handle"></div>
     </div>
 
-    <script src="main.js"></script>
-</body>
+    <script>
+        let draggedModal = null;
+        let dragOffset = { x: 0, y: 0 };
+        let resizingModal = null;
+        let resizeStart = { x: 0, y: 0, width: 0, height: 0 };
+        let minimizedWindows = [];
+        let currentContextIcon = null;
+        let currentDate = new Date();
+        let calendarDate = new Date();
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            const dateString = now.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            document.getElementById('datetime').textContent = `${timeString} ${dateString}`;
+        }
+
+        // Update battery level randomly
+        function updateBattery() {
+            const battery = Math.floor(Math.random() * 20) + 70; // 70-90%
+            document.getElementById('batteryLevel').textContent = `${battery}%`;
+            
+            const batteryIcon = document.querySelector('.battery-icon');
+            if (battery > 50) {
+                batteryIcon.style.background = '#00ff00';
+            } else if (battery > 20) {
+                batteryIcon.style.background = '#ffff00';
+            } else {
+                batteryIcon.style.background = '#ff0000';
+            }
+        }
+
+        // Start menu functionality
+        document.getElementById('startButton').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const startMenu = document.getElementById('startMenu');
+            const startButton = document.getElementById('startButton');
+            
+            if (startMenu.classList.contains('show')) {
+                startMenu.classList.remove('show');
+                startButton.classList.remove('active');
+            } else {
+                startMenu.classList.add('show');
+                startButton.classList.add('active');
+            }
+        });
+
+        // Close start menu and context menu when clicking elsewhere
+        document.addEventListener('click', function(e) {
+            const startMenu = document.getElementById('startMenu');
+            const startButton = document.getElementById('startButton');
+            const contextMenu = document.getElementById('contextMenu');
+            
+            // Close start menu
+            if (!startButton.contains(e.target)) {
+                startMenu.classList.remove('show');
+                startButton.classList.remove('active');
+            }
+            
+            // Close context menu
+            if (!contextMenu.contains(e.target)) {
+                contextMenu.classList.remove('show');
+            }
+        });
+
+        // Desktop icon functionality
+        document.querySelectorAll('.desktop-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                // Remove selection from other icons
+                document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+                // Select this icon
+                this.classList.add('selected');
+                
+                // Open modal immediately on single click
+                const modalId = this.getAttribute('data-modal') + '-modal';
+                console.log('Opening modal:', modalId); // Debug log
+                openModal(modalId);
+            });
+
+            // Right click context menu
+            icon.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                currentContextIcon = this;
+                
+                const contextMenu = document.getElementById('contextMenu');
+                contextMenu.style.left = e.pageX + 'px';
+                contextMenu.style.top = e.pageY + 'px';
+                contextMenu.classList.add('show');
+            });
+        });
+
+        // Start menu items functionality
+        document.querySelectorAll('.start-menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const modalId = this.getAttribute('data-modal') + '-modal';
+                openModal(modalId);
+                
+                // Close start menu
+                const startMenu = document.getElementById('startMenu');
+                const startButton = document.getElementById('startButton');
+                startMenu.classList.remove('show');
+                startButton.classList.remove('active');
+            });
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            console.log('Attempting to open modal:', modalId, modal); // Debug log
+            if (modal) {
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                
+                // Calculate 80% of screen size
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight - 28; // Subtract taskbar height
+                const modalWidth = Math.floor(screenWidth * 0.8);
+                const modalHeight = Math.floor(screenHeight * 0.8);
+                
+                // Center the modal
+                const leftPos = Math.floor((screenWidth - modalWidth) / 2);
+                const topPos = Math.floor((screenHeight - modalHeight) / 2);
+                
+                modal.style.left = leftPos + 'px';
+                modal.style.top = topPos + 'px';
+                modal.style.width = modalWidth + 'px';
+                modal.style.height = modalHeight + 'px';
+                bringToFront(modal);
+                console.log('Modal opened successfully'); // Debug log
+            } else {
+                console.error('Modal not found:', modalId); // Debug log
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                
+                // Remove from minimized windows
+                minimizedWindows = minimizedWindows.filter(w => w.id !== modalId);
+                updateTaskbar();
+            }
+        }
+
+        function minimizeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal && minimizedWindows.length < 5) {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+                
+                // Get modal title
+                const titleElement = modal.querySelector('.modal-title');
+                const title = titleElement ? titleElement.textContent : 'Fenêtre';
+                
+                // Add to minimized windows if not already there
+                if (!minimizedWindows.find(w => w.id === modalId)) {
+                    minimizedWindows.push({ id: modalId, title: title });
+                    updateTaskbar();
+                }
+            }
+        }
+
+        function maximizeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                if (modal.style.width === '100vw') {
+                    modal.style.width = '400px';
+                    modal.style.height = '300px';
+                    modal.style.left = '50px';
+                    modal.style.top = '50px';
+                } else {
+                    modal.style.width = '100vw';
+                    modal.style.height = 'calc(100vh - 28px)';
+                    modal.style.left = '0';
+                    modal.style.top = '0';
+                }
+            }
+        }
+
+        function bringToFront(modal) {
+            const allModals = document.querySelectorAll('.modal');
+            allModals.forEach(m => m.style.zIndex = '100');
+            modal.style.zIndex = '101';
+        }
+
+        function updateTaskbar() {
+            const taskbarWindows = document.getElementById('taskbarWindows');
+            taskbarWindows.innerHTML = '';
+            
+            minimizedWindows.forEach(window => {
+                const button = document.createElement('div');
+                button.className = 'taskbar-window';
+                button.textContent = window.title;
+                button.onclick = () => restoreWindow(window.id);
+                taskbarWindows.appendChild(button);
+            });
+        }
+
+        function restoreWindow(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                bringToFront(modal);
+                
+                // Remove from minimized windows
+                minimizedWindows = minimizedWindows.filter(w => w.id !== modalId);
+                updateTaskbar();
+            }
+        }
+
+        // Modal dragging
+        document.querySelectorAll('.modal-header').forEach(header => {
+            header.addEventListener('mousedown', function(e) {
+                if (e.target.classList.contains('modal-button')) return;
+                
+                draggedModal = this.parentElement;
+                bringToFront(draggedModal);
+                
+                const rect = draggedModal.getBoundingClientRect();
+                dragOffset.x = e.clientX - rect.left;
+                dragOffset.y = e.clientY - rect.top;
+                
+                e.preventDefault();
+            });
+        });
+
+        // Modal resizing
+        document.querySelectorAll('.resize-handle').forEach(handle => {
+            handle.addEventListener('mousedown', function(e) {
+                resizingModal = this.parentElement;
+                bringToFront(resizingModal);
+                
+                const rect = resizingModal.getBoundingClientRect();
+                resizeStart.x = e.clientX;
+                resizeStart.y = e.clientY;
+                resizeStart.width = rect.width;
+                resizeStart.height = rect.height;
+                
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        // Mouse move events
+        document.addEventListener('mousemove', function(e) {
+            if (draggedModal) {
+                draggedModal.style.left = (e.clientX - dragOffset.x) + 'px';
+                draggedModal.style.top = (e.clientY - dragOffset.y) + 'px';
+            }
+            
+            if (resizingModal) {
+                const newWidth = resizeStart.width + (e.clientX - resizeStart.x);
+                const newHeight = resizeStart.height + (e.clientY - resizeStart.y);
+                
+                if (newWidth > 200) {
+                    resizingModal.style.width = newWidth + 'px';
+                }
+                if (newHeight > 150) {
+                    resizingModal.style.height = newHeight + 'px';
+                }
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            draggedModal = null;
+            resizingModal = null;
+        });
+
+        // Click on modal to bring to front
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('mousedown', function() {
+                bringToFront(this);
+            });
+        });
+
+        // Calendar functionality
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            
+            const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                           'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+            
+            title.textContent = `${months[calendarDate.getMonth()]} ${calendarDate.getFullYear()}`;
+            
+            grid.innerHTML = '';
+            
+            // Add day headers
+            days.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day-header';
+                dayHeader.textContent = day;
+                grid.appendChild(dayHeader);
+            });
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(calendarDate.getFullYear(), calendarDate.getMonth(), 1);
+            const lastDay = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            // Generate 42 days (6 weeks)
+            for (let i = 0; i < 42; i++) {
+                const cellDate = new Date(startDate);
+                cellDate.setDate(startDate.getDate() + i);
+                
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = cellDate.getDate();
+                
+                // Check if it's from another month
+                if (cellDate.getMonth() !== calendarDate.getMonth()) {
+                    dayCell.classList.add('other-month');
+                }
+                
+                // Check if it's today
+                if (cellDate.toDateString() === currentDate.toDateString()) {
+                    dayCell.classList.add('today');
+                }
+                
+                // Highlight first day of each month
+                if (cellDate.getDate() === 1 && cellDate.getMonth() === calendarDate.getMonth()) {
+                    dayCell.classList.add('highlighted');
+                    dayCell.addEventListener('click', () => showEventModal(cellDate));
+                }
+                
+                grid.appendChild(dayCell);
+            }
+        }
+
+        function changeMonth(direction) {
+            calendarDate.setMonth(calendarDate.getMonth() + direction);
+            generateCalendar();
+        }
+
+        function showEventModal(date) {
+            const modal = document.getElementById('event-modal');
+            const title = document.getElementById('eventModalTitle');
+            const content = document.getElementById('eventModalContent');
+            
+            const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                           'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            
+            title.textContent = `Événement du 1er ${months[date.getMonth()]} ${date.getFullYear()}`;
+            content.innerHTML = `
+                <h3>Événement spécial du 1er ${months[date.getMonth()]}</h3>
+                <p>Ceci est un événement prévu pour le premier jour du mois de ${months[date.getMonth()].toLowerCase()} ${date.getFullYear()}.</p>
+                <p>Vous pourrez personnaliser ce contenu pour afficher des informations spécifiques à chaque date.</p>
+                <p><strong>Date :</strong> ${date.toLocaleDateString('fr-FR')}</p>
+            `;
+            
+            openModal('event-modal');
+            document.getElementById('calendarPopup').classList.remove('show');
+        }
+
+        // DateTime hover events
+        document.getElementById('datetime').addEventListener('mouseenter', function() {
+            generateCalendar();
+            document.getElementById('calendarPopup').classList.add('show');
+        });
+
+        document.getElementById('datetime').addEventListener('mouseleave', function() {
+            setTimeout(() => {
+                if (!document.getElementById('calendarPopup').matches(':hover')) {
+                    document.getElementById('calendarPopup').classList.remove('show');
+                }
+            }, 100);
+        });
+
+        document.getElementById('calendarPopup').addEventListener('mouseleave', function() {
+            this.classList.remove('show');
+        });
+
+        // Initialize
+        updateDateTime();
+        updateBattery();
+        generateCalendar();
+        setInterval(updateDateTime, 1000);
+        setInterval(updateBattery, 30000);
+
+        // Context menu functions
+        function openFromContext() {
+            if (currentContextIcon) {
+                const modalId = currentContextIcon.getAttribute('data-modal') + '-modal';
+                openModal(modalId);
+                document.getElementById('contextMenu').classList.remove('show');
+            }
+        }
+
+        function showInfo() {
+            document.getElementById('infoPopup').classList.add('show');
+            document.getElementById('contextMenu').classList.remove('show');
+        }
+
+        function closeInfo() {
+            document.getElementById('infoPopup').classList.remove('show');
+        }
+
+        // Close info popup when clicking elsewhere
+        document.addEventListener('click', function(e) {
+            const infoPopup = document.getElementById('infoPopup');
+            if (!infoPopup.contains(e.target) && !e.target.closest('.context-menu-item')) {
+                infoPopup.classList.remove('show');
+            }
+        });
+
+        // Deselect icons when clicking on desktop
+        document.getElementById('desktop').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.querySelectorAll('.desktop-icon').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
+            }
+        });
+
+        // Contact form functionality
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Create mailto link
+            const subject = encodeURIComponent(`Message de ${firstName} ${lastName}`);
+            const body = encodeURIComponent(`Nom: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`);
+            const mailtoLink = `mailto:eleodorandrei@gmail.com?subject=${subject}&body=${body}`;
+            
+            // Open email client
+            window.open(mailtoLink, '_blank');
+            
+            // Show confirmation message
+            document.getElementById('contactMessage').style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            
+            // Hide confirmation message after 3 seconds
+            setTimeout(() => {
+                document.getElementById('contactMessage').style.display = 'none';
+            }, 3000);
+        });
+
+        // Trash Game Variables
+        let gameRunning = false;
+        let papers = [];
+        let gameScore = 0;
+        let totalPapers = 0;
+        let gameAnimationId = null;
+
+        // Paper class
+        class Paper {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.size = 20;
+                this.element = null;
+                this.inTrash = false;
+                this.emoji = this.getRandomEmoji();
+                this.lastBounceTime = Date.now() + Math.random() * 5000; // Random initial delay
+                this.createElement();
+            }
+
+            getRandomEmoji() {
+                const emojis = ['📄', '🗞️', '📰', '🧾', '📋', '📝', '🍎', '🍌', '🥤', '☕', '🖊️', '✏️', '📎', '🔑', '💿', '📱', '🎧', '🖱️', '⌚', '🧸'];
+                return emojis[Math.floor(Math.random() * emojis.length)];
+            }
+
+            createElement() {
+                this.element = document.createElement('div');
+                this.element.style.position = 'absolute';
+                this.element.style.width = this.size + 'px';
+                this.element.style.height = this.size + 'px';
+                this.element.style.background = '#ffffff';
+                this.element.style.border = '1px solid #cccccc';
+                this.element.style.borderRadius = '3px';
+                this.element.style.cursor = 'pointer';
+                this.element.style.zIndex = '3';
+                this.element.style.boxShadow = '2px 2px 4px rgba(0,0,0,0.3)';
+                this.element.innerHTML = this.emoji;
+                this.element.style.fontSize = '16px';
+                this.element.style.display = 'flex';
+                this.element.style.alignItems = 'center';
+                this.element.style.justifyContent = 'center';
+                this.updatePosition();
+                
+                // Add click event
+                this.element.addEventListener('click', () => this.launch());
+                
+                document.getElementById('gameArea').appendChild(this.element);
+            }
+
+            updatePosition() {
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+            }
+
+            launch() {
+                if (this.inTrash) return;
+                
+                // Much stronger random velocity for more bouncing
+                this.vx = (Math.random() - 0.5) * 20;
+                this.vy = (Math.random() - 0.5) * 20 - 8; // Strong upward bias
+            }
+
+            update() {
+                if (this.inTrash) return;
+
+                // Check for automatic bounce if no movement for a while
+                const now = Date.now();
+                if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1 && now - this.lastBounceTime > 3000) {
+                    // Small random bounce to indicate interactivity
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = -2 - Math.random() * 2;
+                    this.lastBounceTime = now + Math.random() * 4000 + 2000; // Next bounce in 2-6 seconds
+                }
+
+                // Apply gravity
+                this.vy += 0.2;
+                
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Get game area bounds
+                const gameArea = document.getElementById('gameArea');
+                const bounds = gameArea.getBoundingClientRect();
+                const gameAreaWidth = gameArea.offsetWidth;
+                const gameAreaHeight = gameArea.offsetHeight;
+                
+                // Bounce off walls with less energy loss for more bouncing
+                if (this.x <= 0) {
+                    this.x = 0;
+                    this.vx = Math.abs(this.vx) * 0.9;
+                }
+                if (this.x >= gameAreaWidth - this.size) {
+                    this.x = gameAreaWidth - this.size;
+                    this.vx = -Math.abs(this.vx) * 0.9;
+                }
+                if (this.y <= 0) {
+                    this.y = 0;
+                    this.vy = Math.abs(this.vy) * 0.9;
+                }
+                if (this.y >= gameAreaHeight - this.size) {
+                    this.y = gameAreaHeight - this.size;
+                    this.vy = -Math.abs(this.vy) * 0.9;
+                    this.vx *= 0.95; // Less friction on ground
+                }
+                
+                // Check collision with boss character
+                const bossCharacter = document.getElementById('bossCharacter');
+                const bossRect = bossCharacter.getBoundingClientRect();
+                const gameRect = gameArea.getBoundingClientRect();
+                
+                const bossX = bossRect.left - gameRect.left;
+                const bossY = bossRect.top - gameRect.top;
+                const bossWidth = bossCharacter.offsetWidth;
+                const bossHeight = bossCharacter.offsetHeight;
+                
+                // Check if paper hits the boss's head area (top third of character)
+                if (this.x + this.size >= bossX && 
+                    this.x <= bossX + bossWidth &&
+                    this.y + this.size >= bossY &&
+                    this.y <= bossY + bossHeight / 3) {
+                    
+                    // Show speech bubble
+                    showBossSpeech();
+                    
+                    // Bounce off the boss
+                    this.vy = -Math.abs(this.vy) * 0.8;
+                    this.vx += (Math.random() - 0.5) * 5;
+                }
+                
+                // Check collision with trash can (only from top)
+                const trashCan = document.getElementById('trashCan');
+                const trashRect = trashCan.getBoundingClientRect();
+                
+                const trashX = trashRect.left - gameRect.left;
+                const trashY = trashRect.top - gameRect.top;
+                const trashWidth = trashCan.offsetWidth;
+                const trashHeight = trashCan.offsetHeight;
+                
+                // Check if paper enters from the top of the trash can
+                if (this.x + this.size/2 >= trashX + 10 && 
+                    this.x + this.size/2 <= trashX + trashWidth - 10 &&
+                    this.y + this.size >= trashY &&
+                    this.y + this.size <= trashY + 15 &&
+                    this.vy > 0) { // Must be falling down
+                    
+                    this.inTrash = true;
+                    this.element.style.display = 'none';
+                    gameScore++;
+                    updateScore();
+                    
+                    // Flash trash can green
+                    trashCan.style.background = '#00ff00';
+                    setTimeout(() => {
+                        trashCan.style.background = '#404040';
+                    }, 100);
+                    
+                    // Check win condition
+                    if (gameScore >= totalPapers) {
+                        setTimeout(() => {
+                            document.getElementById('gameOverMessage').style.display = 'block';
+                            gameRunning = false;
+                        }, 500);
+                    }
+                }
+                
+                this.updatePosition();
+            }
+
+            destroy() {
+                if (this.element && this.element.parentNode) {
+                    this.element.parentNode.removeChild(this.element);
+                }
+            }
+        }
+
+        function startNewGame() {
+            // Reset game state
+            gameRunning = true;
+            gameScore = 0;
+            
+            // Clear existing papers
+            papers.forEach(paper => paper.destroy());
+            papers = [];
+            
+            // Hide game over message
+            document.getElementById('gameOverMessage').style.display = 'none';
+            
+            // Generate random number of papers (8-15)
+            totalPapers = Math.floor(Math.random() * 8) + 8;
+            
+            // Create papers at random positions on the ground
+            const gameArea = document.getElementById('gameArea');
+            const gameAreaWidth = gameArea.offsetWidth;
+            const gameAreaHeight = gameArea.offsetHeight;
+            
+            for (let i = 0; i < totalPapers; i++) {
+                const x = Math.random() * (gameAreaWidth - 100) + 20;
+                // Place papers on the ground (bottom of game area minus paper size)
+                const y = gameAreaHeight - 40 - Math.random() * 20; // Small random variation on ground level
+                papers.push(new Paper(x, y));
+            }
+            
+            updateScore();
+            
+            // Start game loop
+            if (gameAnimationId) {
+                cancelAnimationFrame(gameAnimationId);
+            }
+            gameLoop();
+        }
+
+        function updateScore() {
+            document.getElementById('gameScore').textContent = gameScore;
+            document.getElementById('totalPapers').textContent = totalPapers;
+        }
+
+        function showBossSpeech() {
+            const speechBubble = document.getElementById('speechBubble');
+            const speechText = document.getElementById('speechText');
+            const bossCharacter = document.getElementById('bossCharacter');
+            const gameArea = document.getElementById('gameArea');
+            
+            // Random speech messages
+            const messages = ['Aïe !', 'Arrête ça !', 'Attention !', 'Mais enfin !', 'Ça suffit !'];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            speechText.textContent = randomMessage;
+            
+            // Position bubble next to boss's head
+            const bossRect = bossCharacter.getBoundingClientRect();
+            const gameRect = gameArea.getBoundingClientRect();
+            
+            const bossX = bossRect.left - gameRect.left;
+            const bossY = bossRect.top - gameRect.top;
+            
+            speechBubble.style.left = (bossX + 50) + 'px'; // Centered above the boss
+            speechBubble.style.top = (bossY - 60) + 'px'; // Above the head
+            speechBubble.style.display = 'block';
+            
+            // Hide after 1 second
+            setTimeout(() => {
+                speechBubble.style.display = 'none';
+            }, 1000);
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            // Update all papers
+            papers.forEach(paper => paper.update());
+            
+            gameAnimationId = requestAnimationFrame(gameLoop);
+        }
+
+        // Start game when trash modal is opened
+        const originalOpenModal = openModal;
+        openModal = function(modalId) {
+            originalOpenModal(modalId);
+            if (modalId === 'trash-modal') {
+                setTimeout(() => {
+                    startNewGame();
+                }, 100);
+            }
+        };
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'989db105940e6989',t:'MTc1OTY3NTQwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
