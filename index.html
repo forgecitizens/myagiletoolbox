@@ -515,6 +515,10 @@
                 <div class="battery-icon"></div>
                 <span id="batteryLevel">85%</span>
             </div>
+            <div class="visitor-counter" id="visitorCounter" style="display: flex; align-items: center; gap: 4px; cursor: pointer;" title="Nombre de visiteurs uniques">
+                <span style="font-size: 10px;">👥</span>
+                <span id="visitorCount" style="font-size: 10px; color: #000;">...</span>
+            </div>
             <div id="datetime"></div>
         </div>
     </div>
@@ -1030,6 +1034,36 @@
             }
         }
 
+        // Visitor counter functionality
+        async function updateVisitorCount() {
+            try {
+                // Using CountAPI.xyz - free visitor counter service
+                const response = await fetch('https://api.countapi.xyz/hit/forgecitizens.github.io/myagiletoolbox');
+                const data = await response.json();
+                
+                if (data.value) {
+                    document.getElementById('visitorCount').textContent = data.value.toLocaleString('fr-FR');
+                } else {
+                    document.getElementById('visitorCount').textContent = '1';
+                }
+            } catch (error) {
+                console.log('Visitor counter error:', error);
+                // Fallback to localStorage counter for offline/error cases
+                let localCount = localStorage.getItem('localVisitorCount') || '0';
+                localCount = parseInt(localCount) + 1;
+                localStorage.setItem('localVisitorCount', localCount.toString());
+                document.getElementById('visitorCount').textContent = localCount.toLocaleString('fr-FR');
+            }
+        }
+
+        // Show visitor details on click
+        function showVisitorDetails() {
+            alert('🎯 Compteur de visiteurs uniques\n\n' + 
+                  'Ce compteur affiche le nombre total de visiteurs uniques qui ont visité ce site.\n\n' +
+                  'Chaque visiteur n\'est compté qu\'une seule fois, même s\'il visite plusieurs fois.\n\n' +
+                  'Service fourni par CountAPI.xyz');
+        }
+
         // Start menu functionality
         document.getElementById('startButton').addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1378,9 +1412,13 @@
         // Initialize
         updateDateTime();
         updateBattery();
+        updateVisitorCount();
         generateCalendar();
         setInterval(updateDateTime, 1000);
         setInterval(updateBattery, 30000);
+
+        // Add click event to visitor counter
+        document.getElementById('visitorCounter').addEventListener('click', showVisitorDetails);
 
         // Context menu functions
         function openFromContext() {
