@@ -1011,6 +1011,34 @@
         let currentDate = new Date();
         let calendarDate = new Date();
 
+        // Sound functionality
+        let clickSound = null;
+
+        // Load sound on page load
+        function loadSounds() {
+            try {
+                clickSound = new Audio('sounds/mouseclick.wav');
+                clickSound.volume = 0.5; // Set volume to 50%
+                clickSound.load(); // Preload the sound
+            } catch (error) {
+                console.log('Could not load click sound:', error);
+            }
+        }
+
+        // Play click sound
+        function playClickSound() {
+            if (clickSound) {
+                try {
+                    clickSound.currentTime = 0; // Reset to beginning
+                    clickSound.play().catch(error => {
+                        console.log('Could not play click sound:', error);
+                    });
+                } catch (error) {
+                    console.log('Error playing click sound:', error);
+                }
+            }
+        }
+
         // Update date and time
         function updateDateTime() {
             const now = new Date();
@@ -1107,6 +1135,9 @@
         // Desktop icon functionality
         document.querySelectorAll('.desktop-icon').forEach(icon => {
             icon.addEventListener('click', function() {
+                // Play click sound
+                playClickSound();
+                
                 // Remove selection from other icons
                 document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
                 // Select this icon
@@ -1174,6 +1205,9 @@
         }
 
         function closeModal(modalId) {
+            // Play click sound
+            playClickSound();
+            
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.remove('show');
@@ -1186,6 +1220,9 @@
         }
 
         function minimizeModal(modalId) {
+            // Play click sound
+            playClickSound();
+            
             const modal = document.getElementById(modalId);
             if (modal && minimizedWindows.length < 5) {
                 modal.style.display = 'none';
@@ -1204,6 +1241,9 @@
         }
 
         function maximizeModal(modalId) {
+            // Play click sound
+            playClickSound();
+            
             const modal = document.getElementById(modalId);
             if (modal) {
                 if (modal.style.width === '100vw') {
@@ -1421,6 +1461,7 @@
         updateBattery();
         updateVisitorCount();
         generateCalendar();
+        loadSounds(); // Load sound effects
         setInterval(updateDateTime, 1000);
         setInterval(updateBattery, 30000);
 
