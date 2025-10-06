@@ -1027,55 +1027,16 @@
 
         // Play click sound
         function playClickSound() {
-            // Visual feedback for testing (temporary)
-            console.log('🔊 Sound triggered!');
-            
-            // Flash the screen briefly to show sound is working
-            document.body.style.filter = 'brightness(1.2)';
-            setTimeout(() => {
-                document.body.style.filter = '';
-            }, 100);
-            
             if (clickSound) {
                 try {
                     clickSound.currentTime = 0; // Reset to beginning
                     clickSound.play().catch(error => {
                         console.log('Could not play click sound:', error);
-                        // Show visual indicator when sound fails
-                        showSoundError();
                     });
                 } catch (error) {
                     console.log('Error playing click sound:', error);
-                    showSoundError();
                 }
-            } else {
-                console.log('No sound file loaded - add mouseclick.wav to sounds/ folder');
-                showSoundError();
             }
-        }
-        
-        // Show visual indicator when sound is missing
-        function showSoundError() {
-            const indicator = document.createElement('div');
-            indicator.style.cssText = `
-                position: fixed;
-                top: 10px;
-                right: 10px;
-                background: #ffcccc;
-                border: 1px solid #ff0000;
-                padding: 8px;
-                font-size: 10px;
-                z-index: 10000;
-                border-radius: 3px;
-            `;
-            indicator.textContent = '🔇 Sound file missing';
-            document.body.appendChild(indicator);
-            
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    document.body.removeChild(indicator);
-                }
-            }, 2000);
         }
 
         // Update date and time
