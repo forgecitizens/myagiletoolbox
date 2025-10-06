@@ -1489,6 +1489,9 @@
         }
 
         function changeMonth(direction) {
+            // Play click sound
+            playClickSound();
+            
             calendarDate.setMonth(calendarDate.getMonth() + direction);
             generateCalendar();
         }
